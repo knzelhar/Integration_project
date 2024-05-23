@@ -16,7 +16,6 @@ jobs:
         node-version: ['20.x']
 
     steps:
-    steps:
       - name: Debug
         run: |
           pwd

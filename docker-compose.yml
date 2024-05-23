@@ -9,14 +9,14 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: amal123
     ports:
-      - "3306:3306"  # Change the host port to avoid conflicts
+      - "5432:5432"  # Change the host port to avoid conflicts
 
   # Service Laravel
   backend:
     build:
       context: ./backend # Chemin vers le Dockerfile de Laravel
     ports:
-      - "9090:9000"
+      - "9000:9000"
     environment:
       DB_CONNECTION: pgsql
       DB_HOST: db
@@ -49,5 +49,6 @@ services:
     depends_on:
       - backend
       - vue9
+
 
 

@@ -14,14 +14,7 @@ jobs:
     strategy:
       matrix:
         node-version: ['20.x']
-
-    steps:
-      - name: Debug
-        run: |
-          pwd
-          ls -al
-          ls -al /home/runner/work/Integration_project/Integration_project/
-          cat /home/runner/work/Integration_project/Integration_project/package.json
+        
       - name: Checkout repository
         uses: actions/checkout@v2
 

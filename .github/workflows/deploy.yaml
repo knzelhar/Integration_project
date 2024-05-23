@@ -1,0 +1,35 @@
+name: Continuous deployment
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Déploiement sur le serveur de production
+      - name: Deploy to production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_SERVER_HOST }}
+          username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
+          key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
+          script: |
+
+            # Pull the latest Docker image
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example:latest
+
+            # Stop the existing container
+            docker-compose -f /path/to/docker-compose.yml down
+
+            # Remove the old container
+            docker-compose -f /path/to/docker-compose.yml rm -f
+
+            # Recreate and start the container
+            docker-compose -f /path/to/docker-compose.yml up -d --no-deps --build --remove-orphans

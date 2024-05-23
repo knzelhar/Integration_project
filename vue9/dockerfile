@@ -1,0 +1,34 @@
+# Utiliser une image de base contenant Node.js
+FROM node:latest as build-stage
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier les fichiers du projet dans le conteneur
+COPY . .
+
+# Installer les dépendances du projet en tant qu'utilisateur non-root
+RUN adduser --disabled-password --gecos '' appuser && \
+    chown -R appuser /app
+USER appuser
+
+# Installer les outils de Vue.js CLI localement
+RUN npm install @vue/cli
+
+# Installer les dépendances du projet
+RUN npm install
+
+# Construire l'application Vue.js en tant qu'utilisateur non-root
+RUN npm run build
+
+# Utiliser une image de base contenant un serveur HTTP léger (par exemple, Nginx)
+FROM nginx:stable-alpine as production-stage
+
+# Copier les fichiers de l'application construite depuis l'étape de construction vers le conteneur NGINX
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# Exposer le port 80 pour accéder à l'application via HTTP
+EXPOSE 80
+
+# Commande pour démarrer NGINX lorsqu'un conteneur est lancé
+CMD ["nginx", "-g", "daemon off;"]

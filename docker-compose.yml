@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+# Service PostgreSQL
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: base_de_donnee
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: amal123
+    ports:
+      - "3306:3306"  # Change the host port to avoid conflicts
+
+  # Service Laravel
+  backend:
+    build:
+      context: ./backend # Chemin vers le Dockerfile de Laravel
+    ports:
+      - "9090:9000"
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 3306
+      POSTGRES_DB: base_de_donnee
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: amal123
+    volumes:
+      - ./backend:/var/www/html  # Monter le code source Laravel dans le conteneur
+    depends_on:
+      - db
+
+  # Service frontend Vue.js
+  vue9:
+    build:
+      context: ./vue9 # Chemin vers le Dockerfile du frontend
+    ports:
+      - "80008:80"  # Port du conteneur Vue.js exposé sur le port 8080 de l'hôte
+    depends_on:
+      - backend
+
+
+  # Service Nginx
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8000:80"  # Port du conteneur Nginx exposé sur le port 8000 de l'hôte
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf  # Fichier de configuration Nginx
+    depends_on:
+      - backend
+      - vue9
+
+

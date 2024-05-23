@@ -9,7 +9,6 @@ use Illuminate\Foundation\Auth\User;
 class animateur_user extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'domaine_comp',
         'user_id',
@@ -17,12 +16,12 @@ class animateur_user extends Model
 
     public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function horaires()
     {
-        return $this->morphToMany(horaire::class, 'dispo_horaire');
+        return $this->belongsToMany(horaire::class, 'dipo_horaire_animateurs');
     }
 
     public function activites()

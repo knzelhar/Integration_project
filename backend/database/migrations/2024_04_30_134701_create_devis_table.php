@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('devis', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date')->nullable(false);
+            $table->string('date')->nullable(false);
             $table->decimal('total_ht', 8, 2)->nullable(false);
             $table->decimal('total_ttc', 8, 2)->nullable(false);
             $table->string('devis_pdf')->nullable();

@@ -14,11 +14,8 @@ return new class extends Migration
         Schema::create('packs', function (Blueprint $table) {
             $table->id();
             $table->enum('type',['pack_nbr_enf', 'pack_atelier']);
-<<<<<<< HEAD
             $table->integer('nbr_enfant')->nullable();
             $table->integer('nbr_atelier')->nullable();
-=======
->>>>>>> f8a28ad6 (ajout de OffreController)
             $table->decimal('remise', 8, 2)->nullable()->default(0);
             $table->timestamps();
         });

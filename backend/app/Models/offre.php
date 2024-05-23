@@ -10,10 +10,7 @@ class offre extends Model
     use HasFactory;
 
     protected $fillable = [
-<<<<<<< HEAD
         'titre',
-=======
->>>>>>> f8a28ad6 (ajout de OffreController)
         'date_creation',
         'date_mise_a_jour',
         'date_debut_insc',
@@ -27,12 +24,12 @@ class offre extends Model
 
     public function activiteOffres()
     {
-        return $this->belongsToMany(activite::class, 'offre_option_activites');
+        return $this->belongsToMany(activite::class, 'offre_option_activites','activite_id');
     }
 
     public function optionOffre()
     {
-        return $this->belongsToMany(option_paiement::class, 'offre_option_activites');
+        return $this->belongsToMany(option_paiement::class, 'offre_option_activites','option_pay_id');
     }
 
     public function enfants()

@@ -12,10 +12,7 @@ class facture extends Model
 
     protected $fillable = [
         'date',
-<<<<<<< HEAD
         'statut_paiment',
-=======
->>>>>>> f8a28ad6 (ajout de OffreController)
         'total_ht',
         'total_ttc',
         'facture_pdf'

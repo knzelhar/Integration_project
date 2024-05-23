@@ -17,11 +17,7 @@ class parent_user extends Model
 
     public function users()
     {
-<<<<<<< HEAD
         return $this->belongsTo(User::class,'user_id');
-=======
-        return $this->belongsTo(User::class);
->>>>>>> f8a28ad6 (ajout de OffreController)
     }
 
     public function enfants()

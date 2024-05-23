@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('nom')->nullable(false);
             $table->string('prenom')->nullable(false);
-            $table->date('date_naiss')->nullable(false);
+            $table->string('date_naiss')->nullable(false);
             $table->string('niveau_etu')->nullable(false);
             $table->foreignId('parent_id')->constrained('parent_users')->onDelete('cascade');
             $table->timestamps();

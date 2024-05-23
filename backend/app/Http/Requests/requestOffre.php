@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Controllers\admin\OffreController;
 
-class requestOffre extends FormRequest
+class requestoffre extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +23,18 @@ class requestOffre extends FormRequest
     public function rules(): array
     {
         return [
-           // 'volume_horaire' => 'required',
-            'message_pub' => 'required',
-            'description' => 'required',
-            //'date_fin_insc' => 'required',
-           // 'date_debut_insc' => 'required',
-           // 'date_mise_a_jour' => 'required',
-           // 'date_creation' => 'required',
-            'remise' => 'required',
+            'titre' => 'required|string',
+            'description' => 'required|string',
+            'date_creation' => 'required',
+            // 'date_mise_a_jour' => 'date_format:d/m/Y',
+            'date_debut_insc' => 'nullable|string',
+            'date_fin_insc' => 'nullable|string',
+            'volume_horaire' => 'required|numeric',
+            'message_pub' => 'required|string',
+            'remise' => 'required|numeric',
+            'activite_titres' => 'required|exists:activites,titre',
+            'nbr_seances_sem' => 'required|integer',
+            'duree' => 'required|numeric',
         ];
     }
 }

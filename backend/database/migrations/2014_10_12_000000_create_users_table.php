@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('prenom')->nullable(false);
             $table->string('email')->unique()->nullable(false);
             $table->timestamp('email_verified_at')->nullable();
-            $table->unsignedSmallInteger('role')->nullable(false);
+            $table->unsignedSmallInteger('role')->nullable(false)->default(2);
             $table->string('password')->nullable(false);
+            $table->integer('code')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

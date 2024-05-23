@@ -22,11 +22,14 @@ class requestanimateur extends FormRequest
     public function rules(): array
     {
         return [
+            'domaine_comp' => 'required|string:animateur_users,domaine_comp',
+            'role' => 'required|integer:users,role',
+            'animateur_id' => 'required|integer',
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'email' => 'required|email',
-            'domaine_comp' => 'required|string',
             'password' => 'required|string',
+
         ];
     }
 }

@@ -28,7 +28,7 @@ class activite extends Model
 
     public function animateur_users()
     {
-        return $this->belongsTo(animateur_user::class);
+        return $this->belongsTo(animateur_user::class,'animateur_id');
     }
 
     public function admin_users()
@@ -44,7 +44,7 @@ class activite extends Model
 
     public function horaires()
     {
-        return $this->morphToMany(horaire::class, 'dispo_horaire');
+        return $this->belongsToMany(horaire::class, 'dipo_horaire_activites');
     }
 
 
@@ -68,11 +68,11 @@ class activite extends Model
 
     public function offreAcitvites()
     {
-        return $this->belongsToMany(offre::class, 'offre_option_activites');
+        return $this->belongsToMany(offre::class, 'offre_option_activites','offre_id');
     }
 
     public function optionActvites()
     {
-        return $this->belongsToMany(option_paiement::class, 'offre_option_activites');
+        return $this->belongsToMany(option_paiement::class, 'offre_option_activites','option_pay_id');
     }
 }

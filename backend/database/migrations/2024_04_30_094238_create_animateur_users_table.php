@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('animateur_users', function (Blueprint $table) {
             $table->id();
-            $table->string('domaine_comp')->nullable(false);
+            $table->string('domaine_comp')->default('')->nullable(false);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

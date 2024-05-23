@@ -2,39 +2,50 @@
 
 namespace Database\Factories;
 
+use App\Models\admin_user;
+use App\Models\animateur_user;
+use App\Models\parent_user;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
+
 class UserFactory extends Factory
 {
+
+    protected $model = User::class;
+
     /**
-     * Define the model's default state.
+     * Define the default state of the model.
      *
-     * @return array<string, mixed>
+     * @return array
      */
-    public function definition(): array
+    public function definition()
     {
+        $role = $this->faker->randomElement([0, 1, 2]);
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
+            'nom' => $this->faker->lastName,
+            'prenom' => $this->faker->firstName,
+            'email' => $this->faker->unique()->safeEmail,
+            'role' => $role,
+            'password' => bcrypt('password'),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     *
-     * @return $this
-     */
-    public function unverified(): static
+    public function configure()
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->afterCreating(function (User $user) {
+            if ($user->role === 0) {
+                // Admin User
+                $user->admin_users()->create();
+            } elseif ($user->role === 1) {
+                // Animateur User
+                $user->animateur_users()->create();
+            } elseif ($user->role === 2) {
+                // Parent User
+                $user->parent_users()->create();
+            }
+        });
     }
 }
+

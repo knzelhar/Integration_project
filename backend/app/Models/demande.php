@@ -40,16 +40,11 @@ class demande extends Model
 
     public function packs()
     {
-<<<<<<< HEAD
         return $this->belongsTo(pack::class,'pack_id');
-=======
-        return $this->belongsTo(pack::class);
->>>>>>> f8a28ad6 (ajout de OffreController)
     }
 
     public function parent_users()
     {
-<<<<<<< HEAD
         return $this->belongsTo(parent_user::class,'parent_id');
     }
     public function devis()
@@ -59,18 +54,6 @@ class demande extends Model
 
 
 
-=======
-        return $this->belongsTo(parent_user::class);
-    }
-
-
-
-    public function devis()
-    {
-        return $this->hasOne(devis::class);
-    }
-
->>>>>>> f8a28ad6 (ajout de OffreController)
     public function factures()
     {
         return $this->hasOneThrough(facture::class, devis::class);

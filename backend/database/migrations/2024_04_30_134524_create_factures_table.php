@@ -13,13 +13,10 @@ return new class extends Migration
     {
         Schema::create('factures', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date')->nullable(false);
+            $table->string('date')->nullable(false);
             $table->decimal('total_ht', 8, 2)->nullable(false);
             $table->decimal('total_ttc', 8, 2)->nullable(false);
-<<<<<<< HEAD
             $table->enum('statut_paiment', ['a payer', 'payée', 'non payée','archivé'])->default('A payer');
-=======
->>>>>>> f8a28ad6 (ajout de OffreController)
             $table->string('facture_pdf')->nullable();
             $table->timestamps();
         });

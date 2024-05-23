@@ -15,20 +15,14 @@ class devis extends Model
         'total_ht',
         'total_ttc',
         'devis_pdf',
-<<<<<<< HEAD
-        'facture_id',
+        'facture_id'
+
     ];
-
-
 
     public function demande()
     {
-        return $this->hasOne(Demande::class, 'devis_id');
+        return $this->belongsTo(demande::class, 'demande_id');
     }
-
-
-
-
 
     public function facture()
     {
@@ -36,19 +30,4 @@ class devis extends Model
     }
 
 
-=======
-        'facture_id'
-
-    ];
-
-    public function demandes()
-    {
-        return $this->belongsTo(demande::class);
-    }
-
-    public function factures()
-    {
-        return $this->hasOne(facture::class);
-    }
->>>>>>> f8a28ad6 (ajout de OffreController)
 }

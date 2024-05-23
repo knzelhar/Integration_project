@@ -13,14 +13,11 @@ return new class extends Migration
     {
         Schema::create('offres', function (Blueprint $table) {
             $table->id();
-<<<<<<< HEAD
-            $table->string('titre');
-=======
->>>>>>> f8a28ad6 (ajout de OffreController)
-            $table->timestamp('date_creation')->nullable(false);
-            $table->timestamp('date_mise_a_jour')->nullable();
-            $table->date('date_debut_insc')->nullable(false);
-            $table->date('date_fin_insc')->nullable(false);
+            $table->string('titre')->nullable(false);
+            $table->string('date_creation')->nullable();
+            $table->string('date_mise_a_jour')->nullable();
+            $table->string('date_debut_insc')->nullable();
+            $table->string('date_fin_insc')->nullable();
             $table->text('description');
             $table->text('message_pub');
             $table->decimal('remise', 8, 2)->nullable()->default(0);

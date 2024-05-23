@@ -19,7 +19,7 @@ jobs:
         with:
           host: ${{ secrets.PRODUCTION_SERVER_HOST }}
           username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
-          key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
+          #key: ${{ secrets.PRODUCTION_SERVER_SSH_KEY }}
           script: |
 
             # Pull the latest Docker image

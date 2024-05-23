@@ -23,6 +23,7 @@ class User extends Authenticatable  implements MustVerifyEmail
         'prenom',
         'email',
         'role',
+        'code'
     ];
 
     /**
@@ -44,17 +45,22 @@ class User extends Authenticatable  implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function parent_users(){
+    public function parent_users()
+    {
         return $this->hasOne(parent_user::class);
     }
-    public function admin_users(){
+    public function admin_users()
+    {
         return $this->hasOne(admin_user::class);
     }
 
-    public function animateur_users(){
+    public function animateur_users()
+    {
         return $this->hasOne(animateur_user::class);
     }
-    public function notifications(){
+
+    public function notifications()
+    {
         return $this->hasMany(Notification::class);
     }
 

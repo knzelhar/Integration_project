@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('option_paiements', function (Blueprint $table) {
             $table->id();
             $table->enum('designation',['mensuel', 'Trimestriel', 'semestriel', 'annuel'])->nullable(false);
+            $table->enum('method_pay',['cache', 'cheque', 'en_ligne'])->nullable(false);
             $table->decimal('remise', 8, 2)->nullable()->default(0);
             $table->timestamps();
         });

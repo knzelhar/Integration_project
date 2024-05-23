@@ -40,15 +40,6 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-<<<<<<< HEAD
-
-        'api' => [
-            'driver' => 'sanctum',
-            'provider' => 'users',
-            'hash' => false,
-        ],
-=======
->>>>>>> f8a28ad6 (ajout de OffreController)
     ],
 
     /*

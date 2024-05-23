@@ -11,13 +11,9 @@ class pack extends Model
 
     protected $fillable = [
         'type',
-<<<<<<< HEAD
         'remise',
         'nbr_enfant',
         'nbr_abtelier'
-=======
-        'remise'
->>>>>>> f8a28ad6 (ajout de OffreController)
     ];
 
 

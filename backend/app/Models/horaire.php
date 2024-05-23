@@ -17,16 +17,16 @@ class horaire extends Model
 
     public function enfants()
     {
-        return $this->morphedByMany(enfant::class, 'dispo_horaire');
-    }
-
-    public function activites()
-    {
-        return $this->morphedByMany(activite::class, 'dispo_horaire');
+        return $this->belongsToMany(enfant::class, 'dipo_horaire_enfants');
     }
 
     public function animateur_users()
     {
-        return $this->morphedByMany(animateur_user::class, 'dispo_horaire');
+        return $this->belongsToMany(animateur_user::class, 'dipo_horaire_animateurs');
+    }
+
+    public function activites()
+    {
+        return $this->belongsToMany(activite::class, 'dipo_horaire_activites');
     }
 }

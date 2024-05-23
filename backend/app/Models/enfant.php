@@ -23,9 +23,8 @@ class enfant extends Model
 
     public function horaires()
     {
-        return $this->morphToMany(horaire::class, 'dispo_horaire');
+        return $this->belongsToMany(horaire::class, 'dipo_horaire_enfants');
     }
-
 
     public function activites()
     {
@@ -43,8 +42,8 @@ class enfant extends Model
     }
 
 
-    public function offres()
+    public function enfant_paiements()
     {
-        return $this->belongsToMany(offre::class, 'offre_enfants');
+        return $this->belongsToMany(option_paiement::class, 'enfant_paiements');
     }
 }

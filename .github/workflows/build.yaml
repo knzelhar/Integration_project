@@ -47,11 +47,11 @@ jobs:
 
       # Build Docker image
       - name: Build Docker image
-        run: docker build -t my-image .
+        run: docker-compose build 
 
       # Run tests in Docker container
       - name: Run tests in Docker container
-        run: docker run my-image npm test
+        run: docker-compose run
 
       # Connexion à Docker Hub
       - name: Login to Docker Hub

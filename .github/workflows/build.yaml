@@ -19,42 +19,37 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Node.js ${{ matrix.node-version }}
+      # Installation de Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies
-        run: npm install
+      # Installation des dépendances du projet
+      - name: Install project dependencies
+        run: npm ci
         working-directory: backend
 
-      - name: Build
-        run: npm run build
+      # Construction du projet avec Vite
+      - name: Build project with Vite
+        run: npx vite build
         working-directory: backend
 
-      - name: Test
+      # Exécution des tests
+      - name: Run tests
         run: npm run test
         working-directory: backend
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install dependencies
-        run: npm ci
-        working-directory: backend
-                
-      # Exécuter les tests unitaires Laravel
+      # Exécution des tests unitaires Laravel
       - name: Run Laravel unit tests
         run: php artisan test
 
-      # Build Docker image
+      # Construction de l'image Docker
       - name: Build Docker image
         run: docker-compose build 
         working-directory: backend
 
-      # Run tests in Docker container
+      # Exécution des tests dans le conteneur Docker
       - name: Run tests in Docker container
         run: docker-compose up
         working-directory: backend
@@ -66,8 +61,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Build et push de l'image Docker
-      - name: Build and push
+      # Construction et envoi de l'image Docker
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: ./server

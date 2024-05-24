@@ -58,7 +58,7 @@ jobs:
       # Frontend build and tests
       - name: Build and test Vue.js frontend
         run: |
-          cd frontend
+          cd vue9
           docker build -t my-frontend-image .
           docker run my-frontend-image npm test
 

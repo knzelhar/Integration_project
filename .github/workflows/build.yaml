@@ -30,6 +30,8 @@ jobs:
         run: npm install
         working-directory: backend
 
+      - name: Change permissions for Vite
+        run: chmod +x $(npm bin)/vite
       # Construction du projet avec Vite
       - name: Build project with Vite
         run: npx vite build

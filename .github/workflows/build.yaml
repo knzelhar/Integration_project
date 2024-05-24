@@ -52,9 +52,6 @@ jobs:
       - name: Run Laravel unit tests
         run: php artisan test
         working-directory: backend
-      # Configure npm to use legacy peer dependencies
-      - name: Configure npm
-        run: npm config set legacy-peer-deps true
 
       # Backend build and tests
       - name: Build and test Laravel backend
@@ -62,14 +59,15 @@ jobs:
           docker build -t my-backend-image -f backend/Dockerfile backend
           docker run my-backend-image php artisan test
 
-      # Frontend build and tests      
+      # Frontend build and tests   
+
       - name: Install dependencies
         run: npm install
-        working-directory: vue9
+        working-directory: ./vue9
 
       - name: Build
         run: npm run build
-        working-directory: vue9
+        working-directory: ./vue9
 
       - name: Run tests
         run: npm test

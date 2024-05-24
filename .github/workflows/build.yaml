@@ -48,15 +48,19 @@ jobs:
         run: php artisan test
         working-directory: backend
 
-      # Build Docker image
-      - name: Build Docker image
-        run: docker build -t my-image .
-        working-directory: backend
+       # Backend build and tests
+      - name: Build and test Laravel backend
+        run: |
+          cd backend
+          docker build -t my-backend-image .
+          docker run my-backend-image php artisan test
 
-      # Run tests in Docker container
-      - name: Run tests in Docker container
-        run: docker run my-image npm test
-        working-directory: backend
+      # Frontend build and tests
+      - name: Build and test Vue.js frontend
+        run: |
+          cd frontend
+          docker build -t my-frontend-image .
+          docker run my-frontend-image npm test
 
       # Connexion à Docker Hub
       - name: Login to Docker Hub

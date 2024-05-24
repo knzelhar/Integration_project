@@ -38,6 +38,14 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: backend
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: vue9
+
+      - name: Build
+        run: npm run build
+        working-directory: vue9
         
       - name: Install dependencies for Laravel
         run: npm ci

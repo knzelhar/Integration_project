@@ -11,7 +11,8 @@ COPY . .
 RUN adduser --disabled-password --gecos '' appuser && \
     chown -R appuser /app
 USER appuser
-
+#Configure npm
+RUN npm config set legacy-peer-deps true
 # Installer les outils de Vue.js CLI localement
 RUN npm install @vue/cli
 RUN npm install @vue/cli-service --save-dev

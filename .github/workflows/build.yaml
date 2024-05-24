@@ -29,11 +29,7 @@ jobs:
       - name: Install project dependencies
         run: npm install
         working-directory: backend
-
-      # Construction du projet avec Vite
-      - name: Change permissions for Vite
-        run: chmod +x ./backend/node_modules/.bin/vite
-        working-directory: backend
+        
       # Construction du projet avec Vite
       - name: Build project with Vite
         run: npx vite build

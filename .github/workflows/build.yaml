@@ -30,9 +30,11 @@ jobs:
 
       - name: Build
         run: npm run build
+        working-directory: backend
 
       - name: Test
         run: npm run test
+        working-directory: backend
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -41,6 +43,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: backend
                 
       # Exécuter les tests unitaires Laravel
       - name: Run Laravel unit tests
@@ -49,10 +52,12 @@ jobs:
       # Build Docker image
       - name: Build Docker image
         run: docker-compose build 
+        working-directory: backend
 
       # Run tests in Docker container
       - name: Run tests in Docker container
         run: docker-compose up
+        working-directory: backend
 
       # Connexion à Docker Hub
       - name: Login to Docker Hub

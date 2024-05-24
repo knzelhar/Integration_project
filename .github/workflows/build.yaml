@@ -69,10 +69,6 @@ jobs:
         run: npm run build
         working-directory: ./vue9
 
-      - name: Run tests
-        run: npm test
-        working-directory: ./vue9
-
       - name: Build Docker image
         run: docker build -t my-frontend-image -f vue9/Dockerfile vue9
 

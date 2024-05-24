@@ -19,40 +19,40 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Installation de Node.js
-      - name: Setup Node.js
+      - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
-      # Installation des dépendances du projet
-      - name: Install project dependencies
+      - name: Install dependencies
         run: npm install
         working-directory: backend
-        
-      # Construction du projet avec Vite
-      - name: Build project with Vite
-        run: npx vite build
-        working-directory: backend
 
-      # Exécution des tests
-      - name: Run tests
+      - name: Build
+        run: npm run build
+
+      - name: Test
         run: npm run test
-        working-directory: backend
 
-      # Exécution des tests unitaires Laravel
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm ci
+                
+      # Exécuter les tests unitaires Laravel
       - name: Run Laravel unit tests
         run: php artisan test
 
-      # Construction de l'image Docker
+      # Build Docker image
       - name: Build Docker image
         run: docker-compose build 
-        working-directory: backend
 
-      # Exécution des tests dans le conteneur Docker
+      # Run tests in Docker container
       - name: Run tests in Docker container
         run: docker-compose up
-        working-directory: backend
 
       # Connexion à Docker Hub
       - name: Login to Docker Hub
@@ -61,8 +61,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Construction et envoi de l'image Docker
-      - name: Build and push Docker image
+      # Build et push de l'image Docker
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: ./server

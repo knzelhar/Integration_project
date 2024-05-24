@@ -27,7 +27,7 @@ jobs:
 
       # Installation des dépendances du projet
       - name: Install project dependencies
-        run: npm ci
+        run: npm install
         working-directory: backend
 
       # Construction du projet avec Vite

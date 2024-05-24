@@ -73,7 +73,7 @@ jobs:
         run: docker build -t my-frontend-image -f vue9/Dockerfile vue9
 
       - name: Run container to serve the app
-        run: docker run -d -p 80:80 my-frontend-image npm test
+        run: docker run -d -p 80:80 my-frontend-image 
 
       # Connexion à Docker Hub
       - name: Login to Docker Hub

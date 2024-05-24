@@ -51,7 +51,7 @@ jobs:
 
       # Run tests in Docker container
       - name: Run tests in Docker container
-        run: docker-compose up
+        run: docker run my-image npm test
         working-directory: backend
 
       # Connexion à Docker Hub

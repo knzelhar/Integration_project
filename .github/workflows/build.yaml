@@ -2,9 +2,9 @@ name: Continuous integration
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -22,11 +22,8 @@ jobs:
       - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-        node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node-version }}
         
-      - name: install react scripts
-        run: rm -rf node_modules/
-       
       - name: Install dependencies
         run: npm install
         working-directory: backend
@@ -39,22 +36,18 @@ jobs:
         run: npm run test
         working-directory: backend
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install dependencies
+      - name: Install dependencies for Laravel
         run: npm ci
         working-directory: backend
                 
       # Exécuter les tests unitaires Laravel
       - name: Run Laravel unit tests
         run: php artisan test
+        working-directory: backend
 
       # Build Docker image
       - name: Build Docker image
-        run: docker-compose build 
+        run: docker-compose build
         working-directory: backend
 
       # Run tests in Docker container

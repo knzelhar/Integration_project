@@ -38,7 +38,7 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: backend
-
+        
       - name: Set permissions for vue-cli-service
         run: chmod a+x node_modules/.bin/vue-cli-service 
         working-directory: vue9
@@ -66,6 +66,13 @@ jobs:
           cd backend
           docker build -t my-backend-image .
           docker run my-backend-image php artisan test
+
+      # Frontend build and tests
+      - name: Build and test Vue.js frontend
+        run: |
+          cd vue9
+          docker build -t my-frontend-image .
+          docker run my-frontend-image npm test
 
       # Connexion à Docker Hub
       - name: Login to Docker Hub

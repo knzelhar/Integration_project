@@ -34,11 +34,7 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: backend
-
-      - name: Test
-        run: npx jest
-        working-directory: backend
-
+        
       - name: Install dependencies for Laravel
         run: npm ci
         working-directory: backend

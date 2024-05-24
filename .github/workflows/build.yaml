@@ -46,7 +46,7 @@ jobs:
 
       # Build Docker image
       - name: Build Docker image
-        run: docker build -t my-image 
+        run: docker build -t my-image .
         working-directory: backend
 
       # Run tests in Docker container

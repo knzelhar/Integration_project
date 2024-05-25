@@ -2,9 +2,9 @@ name: Continuous deployment
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -12,8 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-      # Déploiement sur le serveur de production
       - name: Deploy to production
         uses: appleboy/ssh-action@master
         with:
@@ -21,6 +19,20 @@ jobs:
           username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
           password: ${{ secrets.PRODUCTION_SERVER_PASSWORD }}
           script: |
+            # Install Docker
+            if ! command -v docker &> /dev/null
+            then
+              curl -fsSL https://get.docker.com -o get-docker.sh
+              sh get-docker.sh
+              sudo usermod -aG docker $USER
+            fi
+
+            # Install Docker Compose
+            if ! command -v docker-compose &> /dev/null
+            then
+              sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            fi
 
             # Pull the latest Docker image
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example:latest
@@ -32,4 +44,4 @@ jobs:
             docker-compose -f project2/docker-compose.yml rm -f
 
             # Recreate and start the container
-            docker-compose -f project2/docker-compose.yml up -d --no-deps --build --remove-orphans
+            docker-compose -f project2/docker-compose.yml up -d --build --remove-orphans

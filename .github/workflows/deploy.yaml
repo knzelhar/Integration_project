@@ -34,6 +34,9 @@ jobs:
               sudo chmod +x /usr/local/bin/docker-compose
             fi
 
+            # Log in to Docker Hub
+            echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
             # Pull the latest Docker image
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example:latest
 

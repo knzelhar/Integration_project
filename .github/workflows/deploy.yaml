@@ -44,7 +44,7 @@ jobs:
             docker-compose -f ../../docker-compose.yml down
 
             # Remove the old container
-            docker-compose -f ../../docker-compose.yml rm -f
+            docker-compose -f ../docker-compose.yml rm -f
 
             # Recreate and start the container
-            docker-compose -f ../../docker-compose.yml up -d --build --remove-orphans
+            docker-compose -f ../docker-compose.yml up -d --build --remove-orphans

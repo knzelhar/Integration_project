@@ -23,7 +23,7 @@ jobs:
             echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
             # Pull the latest Docker image
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/project2-backend:latest
 
             # Stop the existing container
             docker-compose -f ../../docker-compose.yml down

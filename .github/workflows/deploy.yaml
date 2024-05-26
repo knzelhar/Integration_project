@@ -24,7 +24,7 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
 
             # Stop the existing container
-            docker-compose -f 
+            docker-compose -f down
 
             # Remove the old container
             docker-compose rm -f 

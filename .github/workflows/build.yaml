@@ -29,14 +29,14 @@ jobs:
         with:
           php-version: '8.1'
 
-      - name: Install dependencies for Backend
+      - name: Install dependencies
         run: npm install
         working-directory: backend
 
       - name: Install Vite globally
         run: npm install -g vite
 
-      - name: Build Backend
+      - name: Build
         run: npm run build
         working-directory: ../../backend
         
@@ -48,40 +48,41 @@ jobs:
         run: npm ci
         working-directory: ../../backend
                 
-      # Run Laravel unit tests
+      # Exécuter les tests unitaires Laravel
       - name: Run Laravel unit tests
         run: php artisan test
-        working-directory: ../../backend
+        working-directory: ../..backend
 
-      # Build and test Laravel backend
+      # Backend build and tests
       - name: Build and test Laravel backend
         run: |
           docker build -t project2-backend -f backend/Dockerfile backend
           docker run project2-backend php artisan test
 
       # Frontend build and tests   
-      - name: Install dependencies for Frontend
+
+      - name: Install dependencies
         run: npm install
         working-directory: ../../vue9
 
-      - name: Build Frontend
+      - name: Build
         run: npm run build
         working-directory: ../../vue9
 
-      - name: Build Docker image for Frontend
+      - name: Build Docker image
         run: docker build -t project2-vue9 -f vue9/Dockerfile vue9
 
       - name: Run container to serve the app
         run: docker run -d -p 80:80 project2-vue9 
 
-      # Connect to Docker Hub
+      # Connexion à Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Build and push Docker image for Backend
+       # Build et push de l'image Docker pour le backend
       - name: Build and push backend image
         uses: docker/build-push-action@v5
         with:
@@ -90,7 +91,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
 
-      # Build and push Docker image for Frontend
+      # Build et push de l'image Docker pour le frontend
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
@@ -99,23 +100,4 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-frontend:latest
           
-      # Deploy to production
-      - name: Deploy to production
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.PRODUCTION_SERVER_HOST }}
-          username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
-          password: ${{ secrets.PRODUCTION_SERVER_PASSWORD }}
-          script: |
-            # Pull the latest Docker image
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-frontend:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
-
-            # Stop the existing container
-            docker-compose -f docker-compose.yml down
-
-            # Remove the old container
-            docker-compose -f docker-compose.yml rm -f
-
-            # Recreate and start the container
-            docker-compose -f docker-compose.yml up -d --build --remove-orphans
+          

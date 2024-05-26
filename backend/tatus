@@ -1,0 +1,73 @@
+[33mcommit f523b1c5976ad90a9a21053f7290c7f0d50c1433[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 8c8b4de 1137117
+Author: SoukaynaFR <soukaynafr2019@gmail.com>
+Date:   Sat May 11 17:29:45 2024 +0100
+
+    Resolved merge conflicts from securite-1 branch
+
+[33mcommit 8c8b4deaeb3b1bd199afcdf3834697dcdf82b85b[m
+Merge: 1c8611e b210136
+Author: SoukaynaFR <soukaynafr2019@gmail.com>
+Date:   Sat May 11 16:55:03 2024 +0100
+
+    Resolved merge conflict in README.md
+
+[33mcommit b2101364443ac0013d2651136c743914e5372773[m[33m ([m[1;31mbackend_V3/backend_v3[m[33m, [m[1;32mbackend_v3[m[33m)[m
+Author: SoukaynaFR <soukaynafr2019@gmail.com>
+Date:   Sat May 11 16:15:29 2024 +0100
+
+     some changes
+
+[33mcommit 11371175e82b25c51e3df9ae7234086cc6e2dd38[m[33m ([m[1;31mbackend_V3/securite-1[m[33m, [m[1;32msecurite-1[m[33m)[m
+Author: bassma <bassma.elhllafi@etu.uae.ac.ma>
+Date:   Sat May 11 16:09:47 2024 +0100
+
+    securite
+
+[33mcommit af4164fd90af18540a85a39fbbabcd82b1eecc98[m
+Author: SoukaynaFR <soukaynafr2019@gmail.com>
+Date:   Sat May 11 13:59:22 2024 +0100
+
+    adding EnfantController and making some adjustments
+
+[33mcommit 77a366f19f47e0ddf538b8699b443aabc55bd4cb[m
+Author: SoukaynaFR <soukaynafr2019@gmail.com>
+Date:   Wed May 8 21:46:01 2024 +0100
+
+    ajout des controlleurs Facture,demande et pack
+
+[33mcommit f8a28ad6ad00ef509465e83aca953b713f920f79[m
+Author: bassma <bassma.elhllafi@etu.uae.ac.ma>
+Date:   Mon May 6 19:05:07 2024 +0100
+
+    ajout de OffreController
+
+[33mcommit ef0cef1d2a0b1e3572261061b57633aa216b67a1[m[33m ([m[1;31mbackend_v2/backend_v2[m[33m, [m[1;31mbackend_V3/backend_v2[m[33m, [m[1;32mbackend_v2[m[33m)[m
+Author: SoukaynaFR <soukaynafr2019@gmail.com>
+Date:   Thu May 2 18:17:02 2024 +0100
+
+    creation des Models
+
+[33mcommit 625dc0856549b178ee3cdc7d1eb4350274fe4e9e[m[33m ([m[1;31morigin/backend_v1[m[33m, [m[1;31mbackend_V3/backend_v1[m[33m, [m[1;32mbackend_v1[m[33m, [m[1;32mbacend_v2[m[33m)[m
+Author: IKHanae <iken.hanae@etu.uae.ac.ma>
+Date:   Thu May 2 11:11:03 2024 +0200
+
+    ajout de .env
+
+[33mcommit 6abc7b169959625cba2449a62632ab91649943a9[m
+Author: IKHanae <iken.hanae@etu.uae.ac.ma>
+Date:   Thu May 2 11:02:59 2024 +0200
+
+    modifications de .gitignore
+
+[33mcommit 4ddf7e37709883b274dc8147208fe634ed99140e[m
+Author: unknown <iken.hanae@etu.uae.ac.ma>
+Date:   Wed May 1 22:07:41 2024 +0200
+
+    first commit
+
+[33mcommit 1c8611e15f19e019b6f18ec9703220824ae96c38[m[33m ([m[1;31mbackend_V3/main[m[33m)[m
+Author: IKHanae <166937203+IKHanae@users.noreply.github.com>
+Date:   Wed May 1 12:15:16 2024 +0200
+
+    Initial commit

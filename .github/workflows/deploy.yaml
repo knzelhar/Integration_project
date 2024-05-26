@@ -21,7 +21,7 @@ jobs:
           script: |
             # Pull the latest Docker image
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-frontend:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/saida591/laravel-example-backend:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
 
             # Stop the existing container
             docker-compose -f ../../docker-compose.yml down

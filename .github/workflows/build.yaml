@@ -38,20 +38,20 @@ jobs:
 
       - name: Build
         run: npm run build
-        working-directory: backend
+        working-directory: ../../backend
         
       - name: Set permissions for vue-cli-service
         run: chmod a+x node_modules/.bin/vue-cli-service 
-        working-directory: vue9
+        working-directory: ../../vue9
         
       - name: Install dependencies for Laravel
         run: npm ci
-        working-directory: backend
+        working-directory: ../../backend
                 
       # Exécuter les tests unitaires Laravel
       - name: Run Laravel unit tests
         run: php artisan test
-        working-directory: backend
+        working-directory: ../..backend
 
       # Backend build and tests
       - name: Build and test Laravel backend
@@ -63,11 +63,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./vue9
+        working-directory: ../../vue9
 
       - name: Build
         run: npm run build
-        working-directory: ./vue9
+        working-directory: ../../vue9
 
       - name: Build Docker image
         run: docker build -t project2-vue9 -f vue9/Dockerfile vue9
@@ -99,3 +99,23 @@ jobs:
           file: vue9/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-frontend:latest
+          
+          - name: Deploy to production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_SERVER_HOST }}
+          username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
+          password: ${{ secrets.PRODUCTION_SERVER_PASSWORD }}
+          script: |
+            # Pull the latest Docker image
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-frontend:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
+
+            # Stop the existing container
+            docker-compose -f docker-compose.yml down
+
+            # Remove the old container
+            docker-compose -f docker-compose.yml rm -f
+
+            # Recreate and start the container
+            docker-compose -f docker-compose.yml up -d --build --remove-orphans

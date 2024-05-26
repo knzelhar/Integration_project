@@ -34,6 +34,7 @@
   </template>
   
   <script>
+  import axios from "axios"
   export default {
     data() {
       return {
@@ -63,27 +64,54 @@
         }
       }
     },
-      submitForm() {
+      validForm() {
         this.errors = {};
+        let validForm = true;
         if (this.Password !== this.confPassword) {
           this.errors['confPassword'] = "Les mots de passe ne correspondent pas";
+          validForm = false;
         }
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(this.Email)) {
           this.errors['Email'] = "Veuillez entrer une adresse e-mail valide";
+          validForm = false;
         }
         if(!this.Nom){
           this.errors['LastName'] = "Veuillez entrer votre nom";
+          validForm = false;
+
         }
         if(!this.Prénom){
           this.errors['Name'] = "Veuillez entrer votre prénom";
+          validForm = false;
+
         }
         if(!this.Password){
           this.errors['Pass'] = "Veuillez entrer un mot de passe";
+          validForm = false;
         }
         else{
           this.validatePassword();
         }
+        return validForm;
+      },
+      async submitForm() {
+      if (this.validForm()) {
+        try{
+         await axios.post('http://localhost:8000/api/registerparent', {
+          nom: this.Nom,
+          prenom: this.Prénom,
+          email: this.Email,
+          fonction: this.Fonction,
+          password: this.Password,
+          
+        });
+          this.$router.push('/verifyEmail');
+      }
+        catch(error){
+          console.error('There was an error!', error);
+        }
+      }
       },
       togglePasswordVisibility(fieldNumber) {
       if (fieldNumber === 1) {
@@ -94,6 +122,8 @@
     }
     }
 }
+  
+
   </script>
   
   <style scoped>

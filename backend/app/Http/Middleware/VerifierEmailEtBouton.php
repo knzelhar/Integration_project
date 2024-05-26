@@ -18,17 +18,19 @@ class VerifierEmailEtBouton
 
       
    
-    public function handle(Request $request, Closure $next): Response
-    {
-
-        $user = User::where('email', '=', $request->email)->first();
-        if (!empty($user->remember_token) && $user->email_verified_at !== null) {
-            return $next($request);
-        }else{
-            return response()->json("Vérifiez votre adresse e-mail", 403);
-        }
-
-       
-    }
+     public function handle(Request $request, Closure $next): Response
+     {
+         $user = User::where('email', $request->email)->first();
+ 
+         if ($user->role == 2) {
+             if (!empty($user->remember_token) && $user->email_verified_at !== null) {
+                 return $next($request);
+             } else {
+                 return response()->json(['message' => 'Email not verified'], 403);
+             }
+         }
+ 
+         return $next($request);
+     }
     }
 

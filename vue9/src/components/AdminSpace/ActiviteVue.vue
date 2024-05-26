@@ -18,6 +18,10 @@
       <td>{{ activities.titre }}</td>
       <td>{{ activities.objectif }}</td>
       <td>{{ activities.image_pub }}</td>
+      <td class="mainBtn"><button type="button" class="btn btn-primary">Modifier</button>
+        <button type="button" class="btn btn-danger" @click="deleteActivity(activities.id)">Supprimer</button>
+        <button type="button" class="btn btn-warning" @click="showDetails(activities.id)">Afficher</button>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -40,9 +44,33 @@ data(){
   methods: {
     async getActivities() {
       try {
-        const response = await axios.get('http://localhost:8000/api/activites');
+        //const token = this.$cookies.get('token'); 
+        //console.log(token)
+        const response = await axios.get('http://localhost:8000/api/activites',{
+       /* headers: {
+          'Authorization': `Bearer ${token}`
+        }*/
+      });
         console.log(response.data);
         this.activity = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async showDetails(id) {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/activites/${id}`);
+        console.log(response.data); 
+        this.$router.push({ name: 'showActivite', params: { id: id }});
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleteActivity(id) {
+      try {
+        const response = await axios.delete(`http://localhost:8000/api/activites/${id}`);
+        console.log(response.data);
+        this.getActivities();
       } catch (error) {
         console.log(error);
       }
@@ -89,14 +117,40 @@ data(){
     padding-top: 30px;
 
 }
-th:nth-child(3){
+th{
     width: 200px;
 }
+th:nth-child(1){
+  width:50px;
+}
 th:nth-child(4){
-    width: 350px;
+    width: 400px;
 }
 button a{
   text-decoration: none;
   color: white;
+}
+td{
+  height: 20px;
+}
+.btn-primary{
+  margin-right: 10px;
+  margin-left: -95px ;
+}
+td{
+  vertical-align: middle;
+  height: 70px;
+}
+.btn {
+  width: 90px; /* Fixed width for all buttons */
+  margin-right: 7px;
+  font-size: 13px; 
+  border-radius: 20px;
+}
+.btn-warning{
+  color:white;
+}
+.mainBtn{
+  width:300px;
 }
 </style>

@@ -1,10 +1,8 @@
 <template>
    <div class="main">
       <div class="container">
-   <form @submit.prevent="submitForm" :class="{ 'has-errors': Object.keys(errors).length > 0 }" >
+   <form @submit.prevent="submitForm" >
           <h1>Ajouter Offre</h1>
-          <p v-if="errors['id']" style="color: red;" class="errorMsg">{{ errors['id'] }}</p>
-           <input type="text" placeholder="Id" v-model="id">
            <p v-if="errors['titre']" style="color: red;" class="errorMsg">{{ errors['titre'] }}</p>
             <input type="text" placeholder="Titre de l'offre" v-model="titre">
            <p><em>Veuillez entrer les dates sous format (jour mois année) Ex: 18 Mai 2024</em></p>
@@ -18,12 +16,13 @@
            <input type="text" placeholder="date de fin d'inscription" v-model="date_fin_inscr">
            <p v-if="errors['desc']" style="color: red;" class="errorMsg">{{ errors['desc'] }}</p>
             <input type="text" placeholder="description" v-model="desc">
+            <p v-if="errors['msg_pub']" style="color: red;" class="errorMsg">{{ errors['msg_pub'] }}</p>
            <input type="text" placeholder="message publicitaire" v-model="msg_pub">
            <p v-if="errors['id']" style="color: red;" class="errorMsg">{{ errors['remise'] }}</p>
            <input type="text" placeholder="remise" v-model="remise">
            <p v-if="errors['id']" style="color: red;" class="errorMsg">{{ errors['vol_hor'] }}</p>
            <input type="text" placeholder="volume horaire" v-model="vol_hor">
-           <div class="checkbox">
+           <!--<div class="checkbox">
             <p v-if="errors['activity']" style="color: red;" class="errorMsg">{{ errors['activity'] }}</p>
            <label>Veuillez sélectionner les activités à ajouter à cette l'offre</label>
            <br>
@@ -32,18 +31,18 @@
            <input type="checkbox" v-model="activity2"><label>Activité 2</label>
            <br>
            <input type="checkbox" v-model="activity3"><label>Activité 3</label>
-         </div>
+         </div>-->
             <input type="submit" value="Ajouter">
         </form> 
       </div>
       </div>
 </template>
 <script>
+import axios from "axios"
     export default {
       data() {
         return {
           errors: {},
-          id: '',
           titre:'',
           date_crea:'',
           date_mise:'',
@@ -53,15 +52,15 @@
           msg_pub:'',
           remise:'',
           vol_hor:'',
-          activity1:'',
+          /*activity1:'',
           activity2:'',
-          activity3:''
+          activity3:''*/
         }
       },
       methods: {
-         hasSelectedActivity() {
+         /*hasSelectedActivity() {
             return this.activity1 || this.activity2 || this.activity3;
-         },
+         },*/
          isPositiveInteger(value) {
             const integerRegex = /^[1-9]\d*$/;
             return integerRegex.test(value);
@@ -74,46 +73,82 @@
          const dateRegex = /^\d{1,2}\s(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s\d{4}$/i;
          return dateRegex.test(value);
       },
-        submitForm() {
+        validForm() {
           this.errors = {};
-          if (!this.isPositiveInteger(this.id)) {
+          let formValid= true;
+          /*if (!this.isPositiveInteger(this.id)) {
             this.errors['id'] = "Veuillez entrer un entier positif pour l'id";
+            formValid= false;
+          }*/
+          if (!this.titre) {
+             this.errors['titre'] = "Veuillez entrer un titre pour l'offre";
+            formValid= false;
+          }
+          if(!this.msg_pub){
+            this.errors['msg_pub'] = "Veuillez entrer un message publicitaire pour l'offre";
+            formValid= false;
           }
           if (!this.isValidDate(this.date_crea)) {
             this.errors['date_crea'] = "Veuillez entrer une date valide";
+            formValid= false;
           }
          if (!this.isValidDate(this.date_mise)) {
             this.errors['date_mise'] = "Veuillez entrer une date valide";
+            formValid= false;
           }
          if (!this.isValidDate(this.date_deb_inscr)) {
             this.errors['date_deb_inscr'] = "Veuillez entrer une date valide";
+            formValid= false;
           }
          if (!this.isValidDate(this.date_fin_inscr)) {
             this.errors['date_fin_inscr'] = "Veuillez entrer une date valide";
+            formValid= false;
           }
+          if (!this.desc) {
+             this.errors['desc'] = "Veuillez entrer une description pour l'offre";
+            formValid= false;
+           }
           if (!this.isPositiveNumber(this.remise)) {
             this.errors['remise'] = "Veuillez entrer un nombre positif pour la remise";
+            formValid= false;
           }
           if (!this.isPositiveNumber(this.vol_hor)) {
             this.errors['vol_hor'] = "Veuillez entrer un nombre positif pour le volume horaire";
+            formValid= false;
           }
-          if (!this.hasSelectedActivity()) {
+          /*if (!this.hasSelectedActivity()) {
             this.errors['activity'] = "Veuillez sélectionner au moins une activité.";
-            return;
-          }
-          if (!this.titre) {
-             this.errors['titre'] = "Veuillez entrer un titre pour l'offre";
-           }
-           if (!this.desc) {
-             this.errors['desc'] = "Veuillez entrer une description pour l'offre";
-           }
-          else
-          this.$router.push("/AdminVue");
-
+            formValid= false;
+          }*/
+          return formValid
         },
+      async submitForm(){
+         if(this.validForm()){
+          try{
+          const response = await axios.post('http://localhost:8000/api/offres',{
+                  titre:this.titre,
+                  description:this.desc,
+                  date_creation:this.date_crea,
+                  date_debut_inscr: this.date_deb_inscr,
+                  date_fin_inscr:this.date_fin_inscr,
+                  volume_horaire:this.vol_hor,
+                  message_pub:this.msg_pub,
+                  remise:this.remise
+          });
+          console.log(response.data);
+          alert("Offre ajoutée avec succés") ;
+        }
+        catch (error) {
+        // Handle errors, e.g., display error messages
+        console.error("Error:", error);
+        alert("Failed to add activity. Please try again later.");
+      }
+      
 
       }
+      }
   }
+}
     </script>
 <style scoped>
 *{
@@ -122,7 +157,7 @@
       box-sizing: border-box;
     }
     .main{
-      height:  1500px;
+      height:  1400px;
       width: 100%;
       background-color: white;
 

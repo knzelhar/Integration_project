@@ -5,6 +5,10 @@
      <img src="../assets/boy.webp">
       </div>
         <form @submit.prevent="submitForm" :class="{ 'has-errors': Object.keys(errors).length > 0 }" >
+          <p v-if="errors['isVerified']" style="color: red; font-size: large;" class="errorMsg">{{ errors['isVerified'] }}</p>
+          <p v-if="errors['notExist']" style="color: red; font-size: large;" class="errorMsg">{{ errors['notExist'] }}</p>
+          <p v-if="errors['wrongPass']" style="color: red; font-size: large;" class="errorMsg">{{ errors['wrongPass'] }}</p>
+
           <h1>Se connecter</h1>
            <p v-if="errors['Email']" style="color: red;" class="errorMsg">{{ errors['Email'] }}</p>
            <input type="email" placeholder="Adresse mail" v-model="Email" @blur="validateEmail">
@@ -15,7 +19,7 @@
         </div>
           <!--<input type="text" hidden value="parent">-->
             <input type="submit" value="Se connecter">
-           <p id="Lastp"><router-link to="">Mot de passe oublié?</router-link></p>
+           <p id="Lastp"><router-link to="/ForgetPass">Mot de passe oublié?</router-link></p>
         </form>
       </div>
       <!-- -->
@@ -23,33 +27,62 @@
     </template>
     
     <script>
+    import axios from "axios"
     export default {
       data() {
         return {
           errors: {},
           Email: '',
           Password: '',
-        showPassword: false,
+          showPassword: false,
         }
       },
       methods: {
-        submitForm() {
+        validForm() {
           this.errors = {};
+          let noEmpty = true;
           if (!this.Password) {
             this.errors['Pass'] = "Veuillez entrer un mot de passe";
-    
+            noEmpty = false;
           }
          if (!this.Email){
             this.errors['Email'] = "Veuillez entrer une adresse mail";
+            noEmpty = false;
           }
-          else
-          this.$router.push("/AdminVue");
-
+         return noEmpty;
         },
         togglePasswordVisibility() {
           this.showPassword = !this.showPassword;
+      },
+      async submitForm() {
+      if (this.validForm()) {
+        try {
+          const response = await axios.post('http://localhost:8000/api/hh', {
+            email: this.Email,
+            password: this.Password
+          });
+          this.$cookies.set('token', response.data.token);
+          const role = response.data.role;
+          console.log(response.data);
+          if (role === 0) {
+            this.$router.push('/AdminVue');
+          } else if (role === 1) {
+            this.$router.push('/ContactVue');
+          } else if (role === 2) {
+            this.$router.push('/ContactVue');
+          }
+        } catch (error) {
+          console.error('There was an error with the request:', error);
+          if (error.response && error.response.status === 403) {
+              this.errors['isVerified'] = "Veuillez d'abord vérifier votre adresse e-mail.";
+          }
+          else if (error.response && error.response.status === 401) {
+            this.errors['notExist'] = "Cet usilisateur n'existe pas";
+          }
       }
       }
+      }
+    }
   }
     </script>
     

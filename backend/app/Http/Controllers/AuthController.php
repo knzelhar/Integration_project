@@ -23,42 +23,54 @@ use App\Mail\mailler;
 use Illuminate\Support\Facades\Hash;
 use App\Models\enfant;
 use App\Mail\verifierinscription;
-
+use App\Http\Middleware\VerifierEmailEtBouton;
 class AuthController extends Controller
 {
     use  HasApiTokens;
 
 // la fonction de login
-
-
-
-
-public function login(Request $request)
-{
-    // Tentative d'authentification de l'utilisateur
-    $credentials = $request->only('email', 'password');
-
-    // Vérification si l'utilisateur existe et si le mot de passe est correct
-    if (!Auth::attempt($credentials)) {
-        // Retourne une réponse si l'authentification échoue
-        return response()->json(['message' => 'Invalid credentials'], 401);
+public function hhh(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+    
+        // Fetch the user by email
+        $user = User::where('email', $request->email)->first();
+    
+        // Check if user exists
+        if (!$user) {
+            // Return a response if the authentication fails
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+    
+        // Check if the user's role is 2
+        if ($user->role == 2) {
+            // Check if the user's email is verified
+            if (!$user->email_verified_at) {
+                // Return a response if the email is not verified
+                return response()->json(['message' => 'Email not verified'], 403);
+            }
+    
+            // Apply the middleware
+            $this->middleware(VerifierEmailEtBouton::class);
+        }
+    
+        // Create a token for the user with their role
+        $token = $user->createToken('API token of '.$user->nom, ['access_level' => $user->role]);
+    
+        // Construct the JSON response containing the user and the token
+        $response = [
+            'user' => $user,
+            'role' => $user->role,
+            'token' => $token
+        ];
+    
+        // Return the response with the HTTP 201 (Created) status code
+        return response()->json($response, 201);
     }
 
-    // Récupération de l'utilisateur authentifié
-    $user = Auth::user();
-
-    // Création d'un jeton pour l'utilisateur avec son rôle
-    $token = $user->createToken('my_token', ['role' => $user->role])->plainTextToken;
-
-    // Construction de la réponse JSON contenant l'utilisateur et le jeton
-    $response = [
-        'user' => $user,
-        'token' => $token
-    ];
-
-    // Retourne la réponse avec le code de statut HTTP 201 (Créé)
-    return response()->json($response, 201);
-}
 
     public function logine(Request $request){
 

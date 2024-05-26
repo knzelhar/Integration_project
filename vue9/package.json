@@ -12,8 +12,11 @@
     "bootstrap": "^5.3.3",
     "bootstrap-vue": "^2.23.1",
     "core-js": "^3.8.3",
+    "jsonwebtoken": "^9.0.2",
     "vue": "^3.2.13",
     "vue-axios": "^3.5.2",
+    "vue-cookie": "^1.1.4",
+    "vue-cookies": "^1.8.4",
     "vue-gallery-slideshow": "^1.5.2",
     "vue-router": "^4.0.3"
   },

@@ -15,6 +15,10 @@ import offreVue from '../components/AdminSpace/offreVue.vue'
 import ActiviteVue from '../components/AdminSpace/ActiviteVue.vue'
 import AddOffre from '../components/AdminSpace/AddOffre.vue'
 import AddActivite from '../components/AdminSpace/AddActivite.vue'
+import ForgetPass from '../components/ForgetPass.vue'
+import verifyEmail from '../components/verifyEmail.vue'
+import showActivite from '../components/AdminSpace/showActivite.vue'
+import showOffre from '../components/AdminSpace/showOffre.vue'
 const routes = [
   {
     path: '/',
@@ -72,6 +76,16 @@ const routes = [
     component: ContactVue
   },
   {
+    path: '/ForgetPass',
+    name: 'ForgetPass',
+    component: ForgetPass
+  },
+  {
+    path: '/verifyEmail',
+    name: 'verifyEmail',
+    component: verifyEmail
+  },
+  {
     path: '/AdminVue',
     name: 'AdminVue',
     component: AdminVue,
@@ -91,6 +105,16 @@ const routes = [
       name: 'AddOffre',
       component: AddOffre
   },
+  {
+    path: 'showActivite/:id',
+    name: 'showActivite',
+    component: showActivite
+},
+{
+  path: 'showOffre/:offreId',
+  name: 'showOffre',
+  component: showOffre
+},
   {
     path: 'AddActivite',
     name: 'AddActivite',

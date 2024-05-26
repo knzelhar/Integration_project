@@ -8,7 +8,6 @@ use App\Models\offre;
 use App\Models\activite;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\requestoffre;
-use App\Http\Requests\request;
 use App\Models\enfant_paiement;
 use App\Models\option_paiement;
 use Carbon\Carbon;
@@ -17,12 +16,17 @@ use Illuminate\Http\Client\Request as ClientRequest;
 use Illuminate\Http\Request as HttpRequest;
 // use GuzzleHttp\Psr7\Request as Psr7Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\request; 
 
 
 
 class OffreController extends Controller
 {
-
+    public function afficher($id)
+    {
+        $response =Offre::findOrFail($id);
+        return response()->json($response);
+    }
     public function index()
     {
         //$user = Auth::User();
@@ -31,21 +35,21 @@ class OffreController extends Controller
         //if ($role === 0){
 
         // Récupérer toutes les offres avec la relation activiteOffres chargée
-        $offres = Offre::with('activiteOffres')->get();
-
+        //$offres = Offre::with('activiteOffres')->get();
+        $response =Offre::all();
         // Construire la réponse JSON en incluant le titre de chaque activité pour chaque offre
-        $response = $offres->map(function ($offre) {
-            return [
-                'titre' => $offre->titre,
-                'description' => $offre->description,
-                'date_creation' => $offre->date_creation,
-                'date_mise_a_jour' => $offre->date_mise_a_jour,
-                'volume_horaire' => $offre->volume_horaire,
-                'message_pub' => $offre->message_pub,
-                'remise' => $offre->remise,
-                'activites' => $offre->activiteOffres->pluck('titre')
-            ];
-        });
+        // $response = $offres->map(function ($offre) {
+        //     return [
+        //         'titre' => $offre->titre,
+        //         'description' => $offre->description,
+        //         'date_creation' => $offre->date_creation,
+        //         'date_mise_a_jour' => $offre->date_mise_a_jour,
+        //         'volume_horaire' => $offre->volume_horaire,
+        //         'message_pub' => $offre->message_pub,
+        //         'remise' => $offre->remise,
+        //         //'activites' => $offre->activiteOffres->pluck('titre')
+        //     ];
+        // });
 
         return response()->json($response);
     }
@@ -73,49 +77,49 @@ class OffreController extends Controller
             'volume_horaire' => 'required|numeric',
             'message_pub' => 'required|string',
             'remise' => 'required|numeric',
-            'activite_titres' => 'required|exists:activites,titre',
-            'nbr_seances_sem' => 'required|integer',
-            'duree' => 'required|numeric',
+            // 'activite_titres' => 'required|exists:activites,titre',
+            // 'nbr_seances_sem' => 'required|integer',
+            // 'duree' => 'required|numeric',
         ]);
 
         // Supprimer l'attribut activite_id des données validées
-        unset($validatedData['activite_titres']);
-        unset($validatedData['nbr_seances_sem']);
-        unset($validatedData['duree']);
+        // unset($validatedData['activite_titres']);
+        // unset($validatedData['nbr_hseances_sem']);
+        // unset($validatedData['duree']);
 
         // Créer une nouvelle offre
         $offre = Offre::create($validatedData);
 
         // Appel de la fonction showActivities à l'intérieur de la fonction index
-        $activites = $this->showActivities();
+        // $activites = $this->showActivities();
 
         // Récupérer les IDs des activités sélectionnées depuis la requête
-        $activiteTitres = $request->input('activite_titres');
+        // $activiteTitres = $request->input('activite_titres');
 
         // Vérifier si les titres des activités sont valides et récupérer leurs IDs
-        $activiteIds = [];
-        foreach ($activiteTitres as $titre) {
-            $activite = Activite::where('titre', $titre)->first();
-            if (!$activite) {
-                // Si aucune activité correspondante n'est trouvée dans la base de données
-                return response()->json(['error' => 'Titre d\'activité invalide : ' . $titre], 400);
-            }
-            $activiteIds[] = $activite->id;
-        }
+        // $activiteIds = [];
+        // foreach ($activiteTitres as $titre) {
+        //     $activite = Activite::where('titre', $titre)->first();
+        //     if (!$activite) {
+        //         // Si aucune activité correspondante n'est trouvée dans la base de données
+        //         return response()->json(['error' => 'Titre d\'activité invalide : ' . $titre], 400);
+        //     }
+        //     $activiteIds[] = $activite->id;
+        // }
 
         //  $activiteId = $request->input('activite_id');
 
-        foreach ($activiteIds as $activiteId) {
-            // Insérer une nouvelle ligne dans la table offre_option_activite
-            DB::table('offre_option_activites')->insert([
-                'offre_id' => $offre->id,
-                'activite_id' => $activiteId,
-                'option_pay_id' => null, // vous pouvez ajuster ceci selon vos besoins
-                'nbr_seances_sem' => $request->input('nbr_seances_sem'),
-                'duree' => $request->input('duree'),
-                // Si nécessaire, vous pouvez également définir d'autres champs de la table ici
-            ]);
-        }
+        // foreach ($activiteIds as $activiteId) {
+        //     // Insérer une nouvelle ligne dans la table offre_option_activite
+        //     DB::table('offre_option_activites')->insert([
+        //         'offre_id' => $offre->id,
+        //         'activite_id' => $activiteId,
+        //         'option_pay_id' => null, // vous pouvez ajuster ceci selon vos besoins
+        //         'nbr_seances_sem' => $request->input('nbr_seances_sem'),
+        //         'duree' => $request->input('duree'),
+        //         // Si nécessaire, vous pouvez également définir d'autres champs de la table ici
+        //     ]);
+        // }
 
         // Retourner une réponse JSON avec les données de l'offre créée
         return response()->json(['message' => 'Offre créée avec succès', 'offre' => $offre]);
@@ -197,13 +201,13 @@ class OffreController extends Controller
 
     // option paiment
 
-    public function option_paiement(Request $req, $id_Offre, $id_activite, $id_enfant)
+    public function option_paiement(requestoffre $req, $id_Offre, $id_activite, $id_enfant)
     {
 
         // $user = Auth::User();
 
         // Validation des données de la requête
-        $validatedData = $request->validate([
+        $validatedData = $req->validate([
             'designation' => 'required|string',
             // 'remise' => 'required|decimal',
             'methode_pay' => 'required|decimal'
@@ -211,7 +215,7 @@ class OffreController extends Controller
 
         // Initialiser la variable de remise
         $remise = 0;
-
+        $designation=$validatedData['designation'];
         // Utiliser une structure de contrôle switch pour traiter chaque cas de désignation
         switch ($designation) {
             case 'mois':
@@ -238,7 +242,7 @@ class OffreController extends Controller
 
 
 
-        $offre_option_activite = offre_option_activite::find($id_offre);
+        $offre_option_activite = offre_option_activite::find($id_Offre);
         if ($offre_option_activite->activite_id === $id_activite) {
             $offr = offre_option_activite::table('offre_option_activites')->update([
                 'option_pay_id' => $optionPaiment->id,

@@ -18,7 +18,8 @@ class AnimateurController extends Controller
     public function index()
     {
 
-        $animateurs = User::whereHas('animateur_users')->with('animateur_users')->get();
+        //  $animateurs = User::whereHas('animateur_users')->with('animateur_users')->get();
+         $animateurs = User::all();
         return response()->json($animateurs);
     }
 

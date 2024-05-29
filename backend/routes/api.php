@@ -48,7 +48,7 @@ Route::post('/admin', [AuthController::class, 'adminR'])->name('bassma');
 
 
 
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
 
 
 
@@ -60,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::Post('/store', [OffreController::class, 'store']);
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::Post('/index', [OffreController::class, 'index']);
-});
+// });
 
 
 
@@ -87,7 +87,7 @@ Route::get('/verifier', [AuthController::class, 'sendmailveriy']);
 Route::get('/sendmail1', [resetpassword::class, 'sendmail']);
 Route::get('/frorget1', [resetpassword::class, 'resetPassword']);
 Route::get('/register', [resetpassword::class, 'adminR']);
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
 
 
  
@@ -132,7 +132,7 @@ Route::middleware('auth:sanctum')->group(function () {
  Route::put('/packs/{id}', [PackController::class, 'update']);
  Route::delete('/packs/{id}', [PackController::class, 'destroy']);
  
-});
+// });
  //activites routes
  Route::get('/activites', [ActiviteController::class, 'index']);
 
@@ -215,7 +215,6 @@ Route::post('/resetbassma', [OblierController::class, 'resetPP'])->name('resetpa
 // route regester : 
 Route::post('/registerparent', [AuthController::class, 'registerParent']);
 Route::get('/verify/{token}', [AuthController::class, 'verify'])->name('verify');
-
 
 
 

@@ -17,7 +17,7 @@ class animateur_userFactory extends Factory
     {
         return [
             'domaine_comp' => $this->faker->word,
-            'user_id' => User::factory()->create()->id,
+            'user_id' => 2,
         ];
     }
 }

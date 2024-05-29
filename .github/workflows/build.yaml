@@ -1,4 +1,4 @@
-name: Continuous integration
+name: CI/CD Pipeline
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     strategy:
@@ -16,73 +16,83 @@ jobs:
         node-version: ['20.x']
 
     steps:
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # Setup Node.js
       - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-        
+
+      # Setup PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
 
-      - name: Install dependencies
+      # Install dependencies for backend
+      - name: Install backend dependencies
         run: npm install
         working-directory: backend
 
+      # Install Vite globally
       - name: Install Vite globally
         run: npm install -g vite
 
-      - name: Build
+      # Build backend
+      - name: Build backend
         run: npm run build
-        working-directory: ../../backend
-        
+        working-directory: backend
+
+      # Set permissions for vue-cli-service
       - name: Set permissions for vue-cli-service
         run: chmod a+x node_modules/.bin/vue-cli-service 
-        working-directory: ../../vue9
-        
-      - name: Install dependencies for Laravel
+        working-directory: vue9
+
+      # Install dependencies for Laravel
+      - name: Install Laravel dependencies
         run: npm ci
-        working-directory: ../../backend
-                
-      # Exécuter les tests unitaires Laravel
+        working-directory: backend
+
+      # Run Laravel unit tests
       - name: Run Laravel unit tests
         run: php artisan test
-        working-directory: ../..backend
+        working-directory: backend
 
-      # Backend build and tests
+      # Build and test Laravel backend
       - name: Build and test Laravel backend
         run: |
           docker build -t project2-backend -f backend/Dockerfile backend
           docker run project2-backend php artisan test
 
-      # Frontend build and tests   
-
-      - name: Install dependencies
+      # Install dependencies for frontend
+      - name: Install frontend dependencies
         run: npm install
-        working-directory: ../../vue9
+        working-directory: vue9
 
-      - name: Build
+      # Build frontend
+      - name: Build frontend
         run: npm run build
-        working-directory: ../../vue9
+        working-directory: vue9
 
-      - name: Build Docker image
+      # Build Docker image for frontend
+      - name: Build Docker image for frontend
         run: docker build -t project2-vue9 -f vue9/Dockerfile vue9
 
+      # Run container to serve the app
       - name: Run container to serve the app
-        run: docker run -d -p 80:80 project2-vue9 
+        run: docker run -d -p 80:80 project2-vue9
 
-      # Connexion à Docker Hub
+      # Login to Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-       # Build et push de l'image Docker pour le backend
+      # Build and push backend image to Docker Hub
       - name: Build and push backend image
         uses: docker/build-push-action@v5
         with:
@@ -91,7 +101,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
 
-      # Build et push de l'image Docker pour le frontend
+      # Build and push frontend image to Docker Hub
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
@@ -99,5 +109,24 @@ jobs:
           file: vue9/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-frontend:latest
-          
-          
+
+      # Deploy to production
+      - name: Deploy to production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_SERVER_HOST }}
+          username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
+          password: ${{ secrets.PRODUCTION_SERVER_PASSWORD }}
+          script: |
+            # Pull the latest Docker image
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-frontend:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
+
+            # Stop the existing container
+            docker-compose down
+
+            # Remove the old container
+            docker-compose rm -f
+
+            # Recreate and start the container
+            docker-compose up -d --build --remove-orphans

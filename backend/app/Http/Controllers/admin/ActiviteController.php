@@ -45,7 +45,7 @@ class ActiviteController extends Controller
             'eff_min' => [ 'integer', 'max:255'],
             'eff_max' => [ 'integer', 'max:255'],
             'prix' => ['numeric', 'max:999999.99'],
-            'animateur_id' => ['nullable', 'integer'],
+           // 'animateur_id' => ['nullable', 'integer'],
             // 'admin_id' => [ 'required', 'integer'],
             'type' => [ 'required', 'string'],
             'description_type' => [ 'required', 'string'],
@@ -54,7 +54,7 @@ class ActiviteController extends Controller
        // Crée une nouvelle instance de type_activite
         $type_activite = type_activite::create([
             'type' => $request->type,
-            'description_type' => $request->description
+            'description' => $request->description_type
         ]);
         // Sauvegarde la nouvelle instance de type_activite
         $type_activite->save();

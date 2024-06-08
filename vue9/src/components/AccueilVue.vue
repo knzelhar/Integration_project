@@ -155,7 +155,7 @@ body, html {
   left: 41%; 
   width: 41%; 
   height: 100%;
-  background: orange;
+  background: blue;
   border-bottom-right-radius: 200px; 
   transform: translateX(-100%); 
 }

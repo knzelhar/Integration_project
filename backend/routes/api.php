@@ -31,7 +31,7 @@ use App\Http\Controllers\OblierController;
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. Thesegit 
+| Here is where you can register API routes for your application. Thesegit
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "api" middleware group. Make something great!
 |
@@ -52,7 +52,7 @@ Route::post('/admin', [AuthController::class, 'adminR'])->name('bassma');
 
 
 
-  
+
     // les route de l offre :
     Route::Post('/destroy/{id}', [OffreController::class, 'destroy']);
     Route::delete('/ressource/{id}', [OffreController::class, 'destroy']);
@@ -90,7 +90,7 @@ Route::get('/register', [resetpassword::class, 'adminR']);
 // Route::middleware('auth:sanctum')->group(function () {
 
 
- 
+
  /**
   ** animateur routes
   */
@@ -99,12 +99,12 @@ Route::get('/register', [resetpassword::class, 'adminR']);
  Route::put('/admin/animateurs/{id}', [AnimateurController::class, 'update']);
  Route::delete('/admin/animateurs/{id}', [AnimateurController::class, 'destroy']);
  Route::post('/admin/animateurs/{activiteId}', [AnimateurController::class, 'affecter']);
- 
- 
- 
+
+
+
   /** demande routes
   */
- 
+
  Route::get('/demandes', [DemandeController::class, 'demandes']);
  Route::get('/demandes-a-traiter', [DemandeController::class, 'demandesAtraiter']);
  Route::get('/demandes/{id}', [DemandeController::class, 'show']);
@@ -131,18 +131,18 @@ Route::get('/register', [resetpassword::class, 'adminR']);
  Route::post('/packs', [PackController::class, 'store']);
  Route::put('/packs/{id}', [PackController::class, 'update']);
  Route::delete('/packs/{id}', [PackController::class, 'destroy']);
- 
+
 // });
  //activites routes
  Route::get('/activites', [ActiviteController::class, 'index']);
-
  Route::get('/activites/{id}', [ActiviteController::class, 'show']);
- Route::post('/activites', [ActiviteController::class, 'store']);
  Route::put('/activites/{id}', [ActiviteController::class, 'update']);
+ Route::post('activites', [ActiviteController::class, 'store']);
  Route::delete('/activites/{id}', [ActiviteController::class, 'destroy']);
+ Route::post('/activites', [ActiviteController::class, 'store']);
 
   Route::post('/logout', [AuthController::class, 'logout']);
-  
+
 //});
 
 /**
@@ -155,7 +155,6 @@ Route::get('/register', [resetpassword::class, 'adminR']);
   Route::delete('/offres/{id}', [offreController::class, 'destroy']);
   Route::get('/offres/{id}', [offreController::class, 'afficher']);
 
-  
 
 
 
@@ -206,13 +205,14 @@ Route::get('/register', [resetpassword::class, 'adminR']);
 
 
 
-//les route de l authentification : 
-// route de login : 
+
+//les route de l authentification :
+// route de login :
 Route::post('/hh',[AuthController::class,'hhh'] );
 //oublier mot de pass :
 Route::post('/oublierbassma', [OblierController::class, 'sendResetCodee']);
 Route::post('/resetbassma', [OblierController::class, 'resetPP'])->name('resetpassword');
-// route regester : 
+// route regester :
 Route::post('/registerparent', [AuthController::class, 'registerParent']);
 Route::get('/verify/{token}', [AuthController::class, 'verify'])->name('verify');
 

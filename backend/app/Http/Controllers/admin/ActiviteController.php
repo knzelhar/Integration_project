@@ -27,8 +27,7 @@ class ActiviteController extends Controller
        return response()->json($allactiite);
    //}
     }
-
-    /**
+/**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)

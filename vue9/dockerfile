@@ -13,8 +13,7 @@ RUN adduser --disabled-password --gecos '' appuser && \
 USER appuser
 
 # Installer les outils de Vue.js CLI localement
-RUN npm install @vue/cli
-
+RUN npm install  @vue/cli
 
 # Installer les dépendances du projet
 RUN npm install

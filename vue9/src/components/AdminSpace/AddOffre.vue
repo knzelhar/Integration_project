@@ -123,7 +123,7 @@ import axios from "axios"
           return formValid
         },
       async submitForm(){
-         if(this.validForm()){
+        if (this.validForm()) {
           try{
           const response = await axios.post('http://localhost:8000/api/offres',{
                   titre:this.titre,

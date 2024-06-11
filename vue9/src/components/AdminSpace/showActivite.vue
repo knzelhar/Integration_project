@@ -51,7 +51,7 @@ export default {
     // Fetch activity details based on the ID from route params
     const activityId = this.$route.params.id;
     try {
-      const response = await axios.get(`http://localhost:8000/api/activites/${activityId}`);
+        const response = await axios.get(`http://localhost:8000/api/activites/${activityId}`)
       this.activity = response.data;
     } catch (error) {
       console.error('Error fetching activity details:', error);

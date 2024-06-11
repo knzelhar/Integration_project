@@ -10,6 +10,7 @@ use App\Models\type_activite;
 use App\Models\horaire;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Firebase\JWT\JWT;
 class ActiviteController extends Controller
 {
     /**
@@ -17,15 +18,15 @@ class ActiviteController extends Controller
      */
     public function index()
     {
-      //  $user = Auth::User();
-        //$role = $user->role;
+       $user = Auth::User();
+        $role = $user->role;
 
-   //if ($role === 0){
+   if ($role === 0){
 
         $allactiite = activite::all();
-      // $offres = activite::select('id','titre','objectif','image_pub')->get();
+      $offres = activite::select('id','titre','objectif','image_pub')->get();
        return response()->json($allactiite);
-   //}
+   }
     }
 
     /**
@@ -33,6 +34,9 @@ class ActiviteController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::User();
+         $role = $user->role;
+   if ($role === 0){
         $request->validate([
             'titre' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
@@ -45,8 +49,6 @@ class ActiviteController extends Controller
             'eff_min' => [ 'integer', 'max:255'],
             'eff_max' => [ 'integer', 'max:255'],
             'prix' => ['numeric', 'max:999999.99'],
-           // 'animateur_id' => ['nullable', 'integer'],
-            // 'admin_id' => [ 'required', 'integer'],
             'type' => [ 'required', 'string'],
             'description_type' => [ 'required', 'string'],
 
@@ -73,7 +75,7 @@ class ActiviteController extends Controller
             'eff_max' => $request->eff_max,
             'prix' => $request->prix,
             'animateur_id' => 1, //$request->animateur_id
-            'admin_id' => 1,
+            'admin_id' => 2,
             'type_id' => $typeActiviteId // Ajoute l'identifiant de type_activite à l'activité
         ]);
 
@@ -86,9 +88,13 @@ class ActiviteController extends Controller
         //Retournez une réponse JSON indiquant que l'offre a été créée avec succès
         return response()->json(['message' => 'Activite créée avec succès']);
     }
-
+    }
     public function createHoraire(array $horaireData, $activiteId)
 {
+    $user = Auth::User();
+        $role = $user->role;
+
+   if ($role === 0){
     // Validate the horaire data
     $validator = Validator::make($horaireData, [
         'jour_par_semaine' => ['required', 'string'],
@@ -111,28 +117,36 @@ class ActiviteController extends Controller
         'updated_at' => now(),
     ]);
 }
+}
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-    //     $user = Auth::User();
-    //     $role =$user->role;
-    //    if ($role === 0) {
+        $user = Auth::User();
+        $role = $user->role;
+
+   if ($role === 0){
+        $user = Auth::User();
+        $role =$user->role;
+       if ($role === 0) {
             $activite = Activite::findOrFail($id);
             return response()->json($activite );
-    //    } else {
-    //         return response()->json(['error' => 'Page not found'], 404);
-    //      }
+       } else {
+            return response()->json(['error' => 'Page not found'], 404);
+         }
     }
-
+    }
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
+        $user = Auth::User();
+        $role = $user->role;
 
+   if ($role === 0){
         $request->validate([
             'titre' => ['string', 'max:255'],
             'description' => [ 'string', 'max:255'],
@@ -153,12 +167,16 @@ class ActiviteController extends Controller
         $activite->update($request->all());
         return response()->json($activite, 200);
     }
-
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
+        $user = Auth::User();
+        $role = $user->role;
+
+   if ($role === 0){
          // Trouvez la ressource à supprimer
          $ressource =Activite::findOrFail($id);
 
@@ -166,4 +184,5 @@ class ActiviteController extends Controller
          $ressource->delete();
          return response()->json($ressource, 200);
     }
+}
 }

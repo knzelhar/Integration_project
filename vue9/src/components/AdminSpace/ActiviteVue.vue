@@ -43,14 +43,14 @@ data(){
   },
   methods: {
     async getActivities() {
+          // const authtoken = this.$cookies.get('token'); 
       try {
-        //const token = this.$cookies.get('token'); 
-        //console.log(token)
-        const response = await axios.get('http://localhost:8000/api/activites',{
-       /* headers: {
-          'Authorization': `Bearer ${token}`
-        }*/
-      });
+        // plainText = token.plainText;
+        // console.log(token)
+        const response = await axios.get('http://localhost:8000/api/activites')
+        // headers: {
+        //   'Authorization': `Bearer ${authtoken}`
+        // }
         console.log(response.data);
         this.activity = response.data;
       } catch (error) {

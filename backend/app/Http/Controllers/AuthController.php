@@ -44,6 +44,10 @@ public function hhh(Request $request)
             // Return a response if the authentication fails
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
+        if ($user->password !== $request->password) {
+            // Return a response if the authentication fails
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
     
         // Check if the user's role is 2
         if ($user->role == 2) {
@@ -58,7 +62,7 @@ public function hhh(Request $request)
         }
     
         // Create a token for the user with their role
-        $token = $user->createToken('API token of '.$user->nom, ['access_level' => $user->role]);
+        $token = $user->createToken('API token of '.$user->nom, ['access_level' => $user->role])->plainTextToken;
     
         // Construct the JSON response containing the user and the token
         $response = [
@@ -277,12 +281,6 @@ public function registerAnimateur(animateurRequest $request){
             ], 500); // Utilisation du code d'erreur HTTP 500 pour indiquer une erreur interne du serveur
         }
     }
-
-
-
-
-
-
 
 }
 

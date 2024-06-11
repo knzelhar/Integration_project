@@ -1,35 +1,46 @@
 <template>
     <div class="offre">
-   <div class="tcontainer">
-        <table class="table">
-  <thead>
+        <!-- <table class="table"> -->
+  <!-- <thead>
     <tr>
       <th scope="col">ID</th>
       <th scope="col">Titre</th>
       <th scope="col">Date de création</th>
       <th scope="col">Description</th>
-      <!--<th scope="col">Descriptif</th>-->
       <th scope="col">Message publicitaire</th>
       <th scope="col">Remise</th>
       <th scope="col">Volume horaire</th>
 
 
     </tr>
-  </thead>
-  <tbody>
-    <tr v-if="offre">
-      <td>{{ offre.id }}</td>
-      <td>{{ offre.titre }}</td>
-      <td>{{ offre.date_creation }}</td>
-      <td>{{ offre.description }}</td>
-      <td>{{ offre.message_pub}}</td>
-      <td>{{ offre.remise }}</td>
-      <td>{{ offre.volume_horaire }}</td>
-    </tr>
-  </tbody>
-</table>
+  </thead> -->
+  <!-- <tbody> -->
+    <div class="tcontainer" v-if="offre">
+      <div class="text">
+      <h2>Offre {{ offre.id }}</h2>
+      <p>ID: {{ offre.id }}</p>
+      <p class="header">Titre</p>
+      <p>{{ offre.titre }}</p>
+      <p class="header">Date de création</p>
+      <p>{{ offre.date_creation }}</p>
+      <p class="header">Description</p>
+      <p>{{ offre.description }}</p>
+      <p class="header">Message publicitaire</p>
+      <p>{{ offre.message_pub }}</p>
+      <p class="header">Remise</p>
+      <p>{{ offre.remise }}</p>
+      <p class="header">Volume horaire</p>
+      <p>{{ offre.volume_horaire }}</p>
+    </div>
+    <div class="image">
+      <img :src="require('@/assets/sgirl.png')">
+    </div>
+    </div>
+
+  <!-- </tbody> -->
+<!-- </table> -->
       
-</div>
+
   </div>
 </template>
 <script>
@@ -43,9 +54,10 @@ export default {
   },
   async mounted() {
     // Fetch activity details based on the ID from route params
+    //let token = JSON.parse(localStorage.getItem('token'));
     const offerId = this.$route.params.offreId;
     try {
-      const response = await axios.get(`http://localhost:8000/api/offres/${offerId}`);
+      const response = await axios.get(`http://localhost:8000/api/offres/${offerId}`)
       this.offre = response.data;
     } catch (error) {
       console.error('Error fetching offre details:', error);
@@ -62,7 +74,6 @@ export default {
 /*style for search bar */
 .container {
   padding-top: 20px;
-  padding-left: 400px;
 }
 .btn:hover {
   color: #fff;
@@ -80,20 +91,13 @@ export default {
   border: 1px solid #f8c146;
 }
 .tcontainer{
-    padding-left:100px;
-    padding-top: 30px;
-
+    padding-top: -10px;
+    display: flex;
 }
-th{
-    width: 10px;
-    white-space: nowrap;
-    font-size: smaller;
-}
-th:nth-child(1){
-  width:50px;
-}
-th:nth-child(4){
-    width: 150px;
+.text{
+  padding-left: 300px;
+  padding-top: 50px;
+  width: 750px;
 }
 button a{
   text-decoration: none;
@@ -121,5 +125,30 @@ td{
 }
 .mainBtn{
   width:300px;
+}
+h2{
+  padding-left: 100px;
+}
+h5{
+  padding-bottom: 20px;
+  font-size:larger;
+  text-align:center;
+
+}
+p{
+  padding-bottom: 20px;
+  width: 300px;
+  font-size:larger;
+  text-align:center;
+  font-size: larger;
+}
+.header{
+  font-weight: bolder;
+}
+image{
+  padding-top: 50px;
+}
+.image img{
+  width: 430px;
 }
 </style>

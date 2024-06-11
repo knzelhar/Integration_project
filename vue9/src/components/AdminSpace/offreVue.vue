@@ -43,12 +43,8 @@ export default{
     async getOffre() {
       try {
         //const token = this.$cookies.get('token'); 
-        //console.log(token)
-        const response = await axios.get('http://localhost:8000/api/offres',{
-       /* headers: {
-          'Authorization': `Bearer ${token}`
-        }*/
-      });
+        // console.log(token)
+        const response = await axios.get('http://localhost:8000/api/offres')
         console.log(response.data);
         this.offre = response.data;
       } catch (error) {
@@ -57,7 +53,7 @@ export default{
     },
     async showDetail(offreId) {
       try {
-        const response = await axios.get(`http://localhost:8000/api/offres/${offreId}`);
+        const response = await axios.get(`http://localhost:8000/api/offres/${offreId}`)
         console.log(response.data); 
         this.$router.push({ name: 'showOffre', params: { offreId: offreId }});
       } catch (error) {

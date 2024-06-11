@@ -175,29 +175,32 @@ import axios from "axios"
         return formValid;
       },
         async submitForm(){
-        if (this.validForm()) {
          try {
-        // Make a POST request to your API endpoint
-        const response = await axios.post('http://localhost:8000/api/activites',{
-              titre: this.titre,
-              description: this.description,
-              objectif: this.objectif,
-              image_pub: this.img_pub,
-              lien_youtube: this.lien_ytb,
-              age_min: this.age_min,
-              age_max: this.age_max,
-              eff_min: this.eff_min,
-              eff_max: this.eff_max,
-              descriptif:this.descriptif,
-              prix: this.prix,
-              type: this.type_act,
-              description_type:this.description_type,
-              horaires: this.sessions.map(session => ({
-                    jour_par_semaine: session.jour,
-                    debut: session.heure_deb,
-                    fin: session.heure_fin
-                }))
+           // console.log(token)
+           const response = await axios.post('http://localhost:8000/api/activites', {
+             // get token
+             titre: this.titre,
+             description: this.description,
+             objectif: this.objectif,
+             image_pub: this.img_pub,
+             lien_youtube: this.lien_ytb,
+             age_min: this.age_min,
+             age_max: this.age_max,
+             eff_min: this.eff_min,
+             eff_max: this.eff_max,
+             descriptif: this.descriptif,
+             prix: this.prix,
+             type: this.type_act,
+             description_type: this.description_type,
+             horaires: this.sessions.map(session => ({
+               jour_par_semaine: session.jour,
+               debut: session.heure_deb,
+               fin: session.heure_fin
+             })),
+              //  headers: { 'Authorization': `Bearer ${authToken}` },
         });
+           
+        // console.log(token);
         console.log(response.data); 
         alert("Activity added successfully!");
         
@@ -228,7 +231,7 @@ import axios from "axios"
       }*/
      }
 
- }
+ 
    </script>
 <style scoped>
 *{

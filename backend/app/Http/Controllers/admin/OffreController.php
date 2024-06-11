@@ -29,10 +29,10 @@ class OffreController extends Controller
     }
     public function index()
     {
-        //$user = Auth::User();
-        //$role = $user->role;
+        $user = Auth::User();
+        $role = $user->role;
 
-        //if ($role === 0){
+        if ($role === 0){
 
         // Récupérer toutes les offres avec la relation activiteOffres chargée
         //$offres = Offre::with('activiteOffres')->get();
@@ -52,6 +52,7 @@ class OffreController extends Controller
         // });
 
         return response()->json($response);
+        }
     }
 
     // Fonction pour afficher les activités
@@ -66,6 +67,10 @@ class OffreController extends Controller
 
     public function store(requestoffre $request)
     {
+        $user = Auth::User();
+        $role = $user->role;
+
+        if ($role === 0){
         // Validation des données de la requête
         $validatedData = $request->validate([
             'titre' => 'required|string',
@@ -124,6 +129,7 @@ class OffreController extends Controller
         // Retourner une réponse JSON avec les données de l'offre créée
         return response()->json(['message' => 'Offre créée avec succès', 'offre' => $offre]);
     }
+    }
 
 
     // Affichage d'une offre selon l'id
@@ -131,6 +137,10 @@ class OffreController extends Controller
 
     public function show(string $id)
     {
+        $user = Auth::User();
+        $role = $user->role;
+
+        if ($role === 0){
         // Récupérer l'offre avec la relation activiteOffres chargée
         $offre = Offre::with('activiteOffres')->findOrFail($id);
 
@@ -155,6 +165,7 @@ class OffreController extends Controller
         // Retourner la réponse JSON
         return response()->json($response);
     }
+    }
 
 
 
@@ -165,8 +176,13 @@ class OffreController extends Controller
 
     public function destroyOffre(string $id)
     {
+        $user = Auth::User();
+        $role = $user->role;
+
+        if ($role === 0){
         offre::findOrFail($id)->delete();
         return response()->json(['message' => 'Offre supprimee avec succes'], 200);
+        }
     }
 
     public function remisepaiement(string $designation)

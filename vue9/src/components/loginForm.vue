@@ -61,7 +61,11 @@
             email: this.Email,
             password: this.Password
           });
-          this.$cookies.set('token', response.data.token);
+           const token = response.data.token;
+          // axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          localStorage.setItem('token', JSON.stringify(token));
+          // this.$cookies.set('token', response.data.token);
           const role = response.data.role;
           console.log(response.data);
           if (role === 0) {
@@ -77,7 +81,7 @@
               this.errors['isVerified'] = "Veuillez d'abord vérifier votre adresse e-mail.";
           }
           else if (error.response && error.response.status === 401) {
-            this.errors['notExist'] = "Cet usilisateur n'existe pas";
+            this.errors['notExist'] = "Email ou mot de passe incorrect";
           }
       }
       }

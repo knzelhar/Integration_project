@@ -47,16 +47,16 @@ class User extends Authenticatable  implements MustVerifyEmail
 
     public function parent_users()
     {
-        return $this->hasOne(parent_user::class);
+        return $this->hasMany(parent_user::class);
     }
     public function admin_users()
     {
-        return $this->hasOne(admin_user::class);
+        return $this->hasMany(admin_user::class);
     }
 
     public function animateur_users()
     {
-        return $this->hasOne(animateur_user::class);
+        return $this->hasMany(animateur_user::class);
     }
 
     public function notifications()

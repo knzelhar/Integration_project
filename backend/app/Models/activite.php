@@ -38,13 +38,13 @@ class activite extends Model
 
     public function type_activites()
     {
-        return $this->belongsTo(type_activite::class);
+        return $this->belongsTo(type_activite::class, 'type_id');
     }
 
 
     public function horaires()
     {
-        return $this->belongsToMany(horaire::class, 'dipo_horaire_activites');
+        return $this->belongsToMany(horaire::class, 'dispo_horaire_activites');
     }
 
 
@@ -64,7 +64,7 @@ class activite extends Model
         return $this->belongsToMany(demande::class, 'enfant_demande_activites');
     }
 
-
+    
 
     public function offreAcitvites()
     {

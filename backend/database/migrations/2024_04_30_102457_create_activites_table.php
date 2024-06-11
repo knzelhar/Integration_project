@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('eff_min')->nullable(false);
             $table->integer('eff_max')->nullable(false);
             $table->decimal('prix', 8, 2)->nullable(false);
-            $table->foreignId('animateur_id')->constrained('animateur_users')->onDelete('cascade');
+            $table->foreignId('animateur_id')->nullable()->constrained('animateur_users')->onDelete('cascade');
             $table->foreignId('admin_id')->constrained('admin_users')->onDelete('cascade');
             $table->foreignId('type_id')->constrained('type_activites')->onDelete('cascade');
             $table->timestamps();

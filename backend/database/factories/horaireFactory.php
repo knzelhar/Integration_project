@@ -1,23 +1,19 @@
 <?php
-
 namespace Database\Factories;
 
+use App\Models\Horaire;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\horaire>
- */
-class horaireFactory extends Factory
+class HoraireFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    protected $model = Horaire::class;
+
+    public function definition()
     {
         return [
-            //
+            'jour_par_semaine' => $this->faker->dayOfWeek,
+            'debut' => $this->faker->time,
+            'fin' => $this->faker->time,
         ];
     }
 }

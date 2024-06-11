@@ -5,11 +5,13 @@ namespace App\Http\controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\activite;
+use App\Models\admin_user;
 use Illuminate\Support\Facades\Auth;
 use App\Models\type_activite;
 use App\Models\horaire;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 class ActiviteController extends Controller
 {
     /**
@@ -17,99 +19,92 @@ class ActiviteController extends Controller
      */
     public function index()
     {
-      //  $user = Auth::User();
-        //$role = $user->role;
+    //    $user = Auth::User();
+    //     $role = $user->role;
 
-   //if ($role === 0){
+    // if ($role === 0){
 
-        $allactiite = activite::all();
-      // $offres = activite::select('id','titre','objectif','image_pub')->get();
-       return response()->json($allactiite);
-   //}
+        $activite = activite::all();
+       return response()->json($activite);
+    // }
     }
-/**
-     * Store a newly created resource in storage.
+
+    /**
+     * Stockage de l'activite
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $request->validate([
             'titre' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
             'descriptif' => ['required', 'string', 'max:255'],
-            'objectif' => ['required', 'string','max:255'],
-            'image_pub' => [ 'string', 'min:8'],
-            'lien_youtube' => [ 'string', 'max:255'],
-            'age_min' => [ 'integer', 'max:255'],
-            'age_max' => [ 'integer', 'max:255'],
-            'eff_min' => [ 'integer', 'max:255'],
-            'eff_max' => [ 'integer', 'max:255'],
+            'objectif' => ['required', 'string', 'max:255'],
+            'image_pub' => ['string', 'max:255'],
+            'lien_youtube' => ['string', 'max:255'],
+            'age_min' => ['integer', 'max:255'],
+            'age_max' => ['integer', 'max:255'],
+            'eff_min' => ['integer', 'max:255'],
+            'eff_max' => ['integer', 'max:255'],
             'prix' => ['numeric', 'max:999999.99'],
-           // 'animateur_id' => ['nullable', 'integer'],
-            // 'admin_id' => [ 'required', 'integer'],
-            'type' => [ 'required', 'string'],
-            'description_type' => [ 'required', 'string'],
+            'type' => ['required', 'string'],
+            'description_type' => ['required', 'string'],
+        ]);
 
-        ]);
-       // Crée une nouvelle instance de type_activite
-        $type_activite = type_activite::create([
+        //Creer une nouvelle instance de type_activite
+        $type_activite=type_activite::create([
             'type' => $request->type,
-            'description' => $request->description_type
+            'description' =>$request->description_type
         ]);
-        // Sauvegarde la nouvelle instance de type_activite
         $type_activite->save();
-        // Récupère l'identifiant de type_activite créé
-        $typeActiviteId = $type_activite->id;
-        $activite = Activite::create([
+        $adminId=admin_user::first();
+
+        // Recuperer l'identifiant de type_activite cree
+        $typeActiviteId= $type_activite->id;
+        $activite=activite::create([
             'titre' => $request->titre,
             'description' => $request->description,
             'descriptif' => $request->descriptif,
             'objectif' => $request->objectif,
             'image_pub' => $request->image_pub,
-            'lien_youtube' => $request->lien_youtube,
+            'lien_youtube' => $request -> lien_youtube,
             'age_min' => $request->age_min,
             'age_max' => $request->age_max,
-            'eff_min' => $request->eff_min,
+            'eff_min' =>$request->eff_min,
             'eff_max' => $request->eff_max,
             'prix' => $request->prix,
-            'animateur_id' => 1, //$request->animateur_id
-            'admin_id' => 1,
-            'type_id' => $typeActiviteId // Ajoute l'identifiant de type_activite à l'activité
+            'type_id'=> $typeActiviteId,
+            'animateur_id' => null,
+            'admin_id' => $adminId->id,
         ]);
-
         $activite->save();
-        $horaires = $request->input('horaires', []);
-        foreach ($horaires as $horaireData) {
-            $this->createHoraire($horaireData, $activite->id);
+        $activiteId= $activite->id;
+        $horaires=$request->input('horaires', []);
+        foreach ($horaires as $horaireData){
+            $this->createHoraire($horaireData, $activiteId);
         }
-
-        //Retournez une réponse JSON indiquant que l'offre a été créée avec succès
-        return response()->json(['message' => 'Activite créée avec succès']);
+        return response()->json(['message'=>'Activite cree avec succes']);
     }
 
-    public function createHoraire(array $horaireData, $activiteId)
-{
-    // Validate the horaire data
-    $validator = Validator::make($horaireData, [
-        'jour_par_semaine' => ['required', 'string'],
-        'debut' => ['required'],
-        'fin' => ['required'],
-    ]);
+    /**
+     * Creation de l'horaire concernant l'activite
+     */
 
-    if ($validator->fails()) {
-        throw new \Illuminate\Validation\ValidationException($validator);
+    public function createHoraire(array $horaireData, $activiteId){
+        $validator=Validator::make($horaireData, [
+            'jour_par_semaine' => ['required', 'string'],
+            'debut' => ['required'],
+            'fin' => ['required'],
+        ]);
+        if($validator->fails()){
+            throw new ValidationException($validator);
+        }
+        $horaire=horaire::create($horaireData);
+        DB::table('dispo_horaire_activites')->insert([
+            'horaire_id' => $horaire->id,
+            'activite_id' => $activiteId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
-
-    // Create the horaire
-    $horaire = Horaire::create($horaireData);
-
-    // Link the horaire with the activite in the pivot table
-    DB::table('dispo_horaire_activites')->insert([
-        'horaire_id' => $horaire->id,
-        'activite_id' => $activiteId,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
-}
 
     /**
      * Display the specified resource.

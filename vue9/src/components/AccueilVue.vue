@@ -141,6 +141,7 @@ body, html {
   width: 100%; 
   height: 100vh; 
 }
+/*#E6D6D0*/
 .mainSect {
   position: relative; 
   background-color: #F0F0F0;
@@ -155,7 +156,7 @@ body, html {
   left: 41%; 
   width: 41%; 
   height: 100%;
-  background: #E6D6D0;
+  background: blue;
   border-bottom-right-radius: 200px; 
   transform: translateX(-100%); 
 }

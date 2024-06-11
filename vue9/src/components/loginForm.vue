@@ -7,7 +7,7 @@
         <form @submit.prevent="submitForm" :class="{ 'has-errors': Object.keys(errors).length > 0 }" >
           <p v-if="errors['isVerified']" style="color: red; font-size: large;" class="errorMsg">{{ errors['isVerified'] }}</p>
           <p v-if="errors['notExist']" style="color: red; font-size: large;" class="errorMsg">{{ errors['notExist'] }}</p>
-          <p v-if="errors['wrongPass']" style="color: red; font-size: large;" class="errorMsg">{{ errors['wrongPass'] }}</p>
+          <!-- <p v-if="errors['wrongPass']" style="color: red; font-size: large;" class="errorMsg">{{ errors['wrongPass'] }}</p> -->
 
           <h1>Se connecter</h1>
            <p v-if="errors['Email']" style="color: red;" class="errorMsg">{{ errors['Email'] }}</p>

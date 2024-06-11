@@ -75,7 +75,7 @@ class ActiviteController extends Controller
             'eff_max' => $request->eff_max,
             'prix' => $request->prix,
             'animateur_id' => 1, //$request->animateur_id
-            'admin_id' => 1,
+            'admin_id' => 2,
             'type_id' => $typeActiviteId // Ajoute l'identifiant de type_activite à l'activité
         ]);
 

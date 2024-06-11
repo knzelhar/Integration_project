@@ -13,11 +13,11 @@ class parent_userFactory extends Factory
 {
     protected $model = parent_user::class;
 
-    public function definition(): array
+    public function definition()
     {
         return [
+            'user_id' => User::factory(), // Crée un utilisateur pour chaque parent_user
             'fonction' => $this->faker->word,
-            'user_id' => User::factory()->create()->id,
-        ];
+            ];
     }
 }

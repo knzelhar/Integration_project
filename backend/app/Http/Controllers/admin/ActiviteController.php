@@ -42,7 +42,7 @@ class ActiviteController extends Controller
             'description' => ['required', 'string', 'max:255'],
             'descriptif' => ['required', 'string', 'max:255'],
             'objectif' => ['required', 'string','max:255'],
-            'image_pub' => [ 'string', 'min:8'],
+            'image_pub' => [ 'string', 'max:255'],
             'lien_youtube' => [ 'string', 'max:255'],
             'age_min' => [ 'integer', 'max:255'],
             'age_max' => [ 'integer', 'max:255'],
@@ -75,7 +75,7 @@ class ActiviteController extends Controller
             'eff_max' => $request->eff_max,
             'prix' => $request->prix,
             'animateur_id' => 1, //$request->animateur_id
-            'admin_id' => 2,
+            'admin_id' => 1,
             'type_id' => $typeActiviteId // Ajoute l'identifiant de type_activite à l'activité
         ]);
 
@@ -151,7 +151,7 @@ class ActiviteController extends Controller
             'titre' => ['string', 'max:255'],
             'description' => [ 'string', 'max:255'],
             'objectif' => [ 'string','max:255'],
-            'image_pub' => [ 'string', 'min:8'],
+            'image_pub' => [ 'string', 'max:255'],
             'lien_youtube' => [ 'string', 'max:255'],
             'age_min' => [ 'string', 'max:255'],
             'age_max' => [ 'string', 'max:255'],

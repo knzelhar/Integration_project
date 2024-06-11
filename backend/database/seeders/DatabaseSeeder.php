@@ -5,9 +5,10 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\admin_user;
-use App\Models\animateur_user;
-use Illuminate\Database\Eloquent\Factories\Sequence;
+use App\Models\type_activite;
+use App\Models\activite;
+use App\Models\horaire;
+use Database\Factories\ActiviteFactory;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,29 +17,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()
-        ->count(1)
-        ->state(new Sequence(
-            ['role'=>1],
-        ))
-        ->create()
-        ->each(function($user){
-            animateur_user::create([
-                'user_id'=>2,
-            ]);
-        });
-        // animateur_user::factory()
-        //->count(1);
-        // $this->call(
+        User::factory()->count(1)->withadmin()->create();
 
-        //         UserSeeder::class,
-        //         admin_userSeeder::class,
-        // );
-        // \App\Models\User::factory(10)->create();
+        User::factory()->count(1)->withanimateur()->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        User::factory()->count(1)->withparent()->create();
+
+        //type_activite::factory()->count(3)->create();
+        // Horaire::factory()->count(3)->create();
+
+        // Activite::factory()->count(3)
+            // ->withHoraires(3)
+            // ->create();
+
     }
 }

@@ -7,7 +7,7 @@
         <form @submit.prevent="submitForm" :class="{ 'has-errors': Object.keys(errors).length > 0 }" >
           <p v-if="errors['isVerified']" style="color: red; font-size: large;" class="errorMsg">{{ errors['isVerified'] }}</p>
           <p v-if="errors['notExist']" style="color: red; font-size: large;" class="errorMsg">{{ errors['notExist'] }}</p>
-          <!-- <p v-if="errors['wrongPass']" style="color: red; font-size: large;" class="errorMsg">{{ errors['wrongPass'] }}</p> -->
+          <p v-if="errors['wrongPass']" style="color: red; font-size: large;" class="errorMsg">{{ errors['wrongPass'] }}</p>
 
           <h1>Se connecter</h1>
            <p v-if="errors['Email']" style="color: red;" class="errorMsg">{{ errors['Email'] }}</p>
@@ -61,11 +61,7 @@
             email: this.Email,
             password: this.Password
           });
-           const token = response.data.token;
-          // axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          localStorage.setItem('token', JSON.stringify(token));
-          // this.$cookies.set('token', response.data.token);
+          this.$cookies.set('token', response.data.token);
           const role = response.data.role;
           console.log(response.data);
           if (role === 0) {
@@ -81,7 +77,7 @@
               this.errors['isVerified'] = "Veuillez d'abord vérifier votre adresse e-mail.";
           }
           else if (error.response && error.response.status === 401) {
-            this.errors['notExist'] = "Email ou mot de passe incorrect";
+            this.errors['notExist'] = "Cet usilisateur n'existe pas";
           }
       }
       }

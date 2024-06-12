@@ -48,7 +48,7 @@ Route::post('/admin', [AuthController::class, 'adminR'])->name('bassma');
 
 
 
-// Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
 
 
 
@@ -137,13 +137,12 @@ Route::get('/register', [resetpassword::class, 'adminR']);
  Route::get('/activites', [ActiviteController::class, 'index']);
  Route::get('/activites/{id}', [ActiviteController::class, 'show']);
  Route::put('/activites/{id}', [ActiviteController::class, 'update']);
- Route::post('activites', [ActiviteController::class, 'store']);
  Route::delete('/activites/{id}', [ActiviteController::class, 'destroy']);
- Route::post('/activites', [ActiviteController::class, 'store']);
+
 
   Route::post('/logout', [AuthController::class, 'logout']);
 
-//});
+});
 
 /**
   ** offre routes

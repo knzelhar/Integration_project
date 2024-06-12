@@ -118,15 +118,9 @@ jobs:
           username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
           password: ${{ secrets.PRODUCTION_SERVER_PASSWORD }}
           script: |
-            # Pull the latest Docker image
+            cd /home/kenza/Project2
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-frontend:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
-
-            # Stop the existing container
             docker-compose down
-
-            # Remove the old container
             docker-compose rm -f
-
-            # Recreate and start the container
             docker-compose up -d --build --remove-orphans

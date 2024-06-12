@@ -121,6 +121,6 @@ jobs:
             cd /home/kenza/Project2
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-frontend:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
-            docker-compose docker-cpmpose.yml down
-            docker-compose docker-compose.yml rm -f
-            docker-compose docker-compose.yml up -d --build --remove-orphans
+            docker-compose down
+            docker-compose rm -f
+            docker-compose up -d --build --remove-orphans

@@ -118,7 +118,7 @@ jobs:
           username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
           password: ${{ secrets.PRODUCTION_SERVER_PASSWORD }}
           script: |
-            cd /home/kenza/Project2
+            cd /home/user/project # Remplacer par le répertoire correct
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-frontend:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
             docker-compose down

@@ -123,10 +123,10 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-example-backend:latest
 
             # Stop the existing container
-            docker-compose -f docker-compose.yml down
+            docker-compose docker-compose.yml down
 
             # Remove the old container
-            docker-compose -f docker-compose.yml rm -f
+            docker-compose docker-compose.yml rm -f
 
             # Recreate and start the container
-            docker-compose -f docker-compose.yml up -d --build --remove-orphans
+            docker-compose docker-compose.yml up -d --build --remove-orphans

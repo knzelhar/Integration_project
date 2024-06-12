@@ -139,7 +139,6 @@ Route::get('/register', [resetpassword::class, 'adminR']);
  Route::put('/activites/{id}', [ActiviteController::class, 'update']);
  Route::delete('/activites/{id}', [ActiviteController::class, 'destroy']);
 
-
   Route::post('/logout', [AuthController::class, 'logout']);
 
 });

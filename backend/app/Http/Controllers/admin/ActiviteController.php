@@ -28,6 +28,7 @@ class ActiviteController extends Controller
    //}
     }
 
+
     /**
      * Display the specified resource.
      */

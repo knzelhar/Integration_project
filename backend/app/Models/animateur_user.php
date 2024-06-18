@@ -21,7 +21,7 @@ class animateur_user extends Model
 
     public function horaires()
     {
-        return $this->belongsToMany(horaire::class, 'dipo_horaire_animateurs');
+        return $this->belongsToMany(horaire::class, 'dispo_horaire_animateurs', 'animateur_id', 'horaire_id');
     }
 
     public function activites()

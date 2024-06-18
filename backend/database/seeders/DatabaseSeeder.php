@@ -19,16 +19,15 @@ class DatabaseSeeder extends Seeder
     {
         User::factory()->count(1)->withadmin()->create();
 
-        User::factory()->count(2)->withanimateur()->create();
+        User::factory()->count(1)->withanimateur()->create();
 
-        User::factory()->count(2)->withparent()->create();
+        User::factory()->count(1)->withparent()->create();
 
-        //type_activite::factory()->count(3)->create();
         // Horaire::factory()->count(3)->create();
 
-        // Activite::factory()->count(3)
-            // ->withHoraires(3)
-            // ->create();
+        Activite::factory()->count(3)
+            ->withHoraires(3)
+            ->create();
 
     }
 }

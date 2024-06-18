@@ -20,9 +20,8 @@ return new class extends Migration
             $table->date('date_traitement')->nullable();
             $table->text('motif_refus_admin')->nullable();
             $table->foreignId('parent_id')->constrained('parent_users')->onDelete('cascade');
-            $table->foreignId('pack_id')->constrained('packs')->onDelete('cascade');
+            $table->foreignId('pack_id')->nullable()->constrained('packs')->onDelete('cascade');
             $table->foreignId('admin_id')->nullable()->constrained('admin_users')->onDelete('cascade');
-            $table->foreignId('devis_id')->constrained('devis')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -33,5 +32,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('demandes');
+    }
+    public function priority(): int
+    {
+        return 1;
     }
 };

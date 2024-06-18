@@ -15,7 +15,7 @@ class devis extends Model
         'total_ht',
         'total_ttc',
         'devis_pdf',
-        'facture_id'
+        'demande_id'
 
     ];
 

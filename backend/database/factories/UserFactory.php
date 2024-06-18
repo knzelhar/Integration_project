@@ -24,20 +24,6 @@ class UserFactory extends Factory
         ];
     }
 
-    // public function withadmin()
-    // {
-    //     return $this->state(function (array $attributes) {
-    //         return ['role' => 0]; // Assure que le rôle est 'admin'
-    //     })
-    //     ->has(
-    //         admin_user::factory()
-    //             ->count(3)
-    //             ->state(function (array $attributes, User $user) {
-    //                 return ['user_id' => $user->id];
-    //             }),
-    //             'admin_users' // Correspond au nom de la méthode dans le modèle User
-    //         );
-    // }
 
     public function withadmin()
     {

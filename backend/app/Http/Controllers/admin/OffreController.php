@@ -7,258 +7,212 @@ use App\Models\offre_option_activite;
 use App\Models\offre;
 use App\Models\activite;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\requestoffre;
-use App\Models\enfant_paiement;
 use App\Models\option_paiement;
-use Carbon\Carbon;
-use GuzzleHttp\Psr7\Request as Psr7Request;
-use Illuminate\Http\Client\Request as ClientRequest;
-use Illuminate\Http\Request as HttpRequest;
-// use GuzzleHttp\Psr7\Request as Psr7Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\request; 
+use Illuminate\Http\Request;
 
 
 
 class OffreController extends Controller
 {
-    public function afficher($id)
-    {
-        $response =Offre::findOrFail($id);
-        return response()->json($response);
-    }
+    /**
+     ? Affichage de l'offre
+     */
+
     public function index()
     {
-        //$user = Auth::User();
-        //$role = $user->role;
+        $user = Auth::User();
+        $role = $user->role;
 
-        //if ($role === 0){
+        if ($role === 0) {
+            $response = Offre::all();
 
-        // Récupérer toutes les offres avec la relation activiteOffres chargée
-        //$offres = Offre::with('activiteOffres')->get();
-        $response =Offre::all();
-        // Construire la réponse JSON en incluant le titre de chaque activité pour chaque offre
-        // $response = $offres->map(function ($offre) {
-        //     return [
-        //         'titre' => $offre->titre,
-        //         'description' => $offre->description,
-        //         'date_creation' => $offre->date_creation,
-        //         'date_mise_a_jour' => $offre->date_mise_a_jour,
-        //         'volume_horaire' => $offre->volume_horaire,
-        //         'message_pub' => $offre->message_pub,
-        //         'remise' => $offre->remise,
-        //         //'activites' => $offre->activiteOffres->pluck('titre')
-        //     ];
-        // });
-
-        return response()->json($response);
+            return response()->json($response);
+        }
     }
 
-    // Fonction pour afficher les activités
-    private function showActivities()
-    {
-        // Récupérer les activités
-        $activites = Activite::pluck('titre')->toArray();
+    /**
+     ? Affichage des details de l'offre
+     */
 
-        // Retourner les activités (ne renvoyez pas de réponse JSON ici)
-        return $activites;
-    }
+     public function show(string $id)
+     {
+        $user = Auth::User();
+        $role = $user->role;
 
-    public function store(requestoffre $request)
-    {
-        // Validation des données de la requête
-        $validatedData = $request->validate([
-            'titre' => 'required|string',
-            'description' => 'required|string',
-            'date_creation' => 'required',
-            // 'date_mise_a_jour' => 'date_format:d/m/Y',
-            'date_debut_insc' => 'nullable|string',
-            'date_fin_insc' => 'nullable|string',
-            'volume_horaire' => 'required|numeric',
-            'message_pub' => 'required|string',
-            'remise' => 'required|numeric',
-            // 'activite_titres' => 'required|exists:activites,titre',
-            // 'nbr_seances_sem' => 'required|integer',
-            // 'duree' => 'required|numeric',
-        ]);
+        if ($role === 0) {
+        $activiteIds = Offre_option_activite::where('offre_id', $id)
+                                    ->select('activite_id')
+                                    ->distinct()
+                                    ->get();
 
-        // Supprimer l'attribut activite_id des données validées
-        // unset($validatedData['activite_titres']);
-        // unset($validatedData['nbr_hseances_sem']);
-        // unset($validatedData['duree']);
-
-        // Créer une nouvelle offre
-        $offre = Offre::create($validatedData);
-
-        // Appel de la fonction showActivities à l'intérieur de la fonction index
-        // $activites = $this->showActivities();
-
-        // Récupérer les IDs des activités sélectionnées depuis la requête
-        // $activiteTitres = $request->input('activite_titres');
-
-        // Vérifier si les titres des activités sont valides et récupérer leurs IDs
-        // $activiteIds = [];
-        // foreach ($activiteTitres as $titre) {
-        //     $activite = Activite::where('titre', $titre)->first();
-        //     if (!$activite) {
-        //         // Si aucune activité correspondante n'est trouvée dans la base de données
-        //         return response()->json(['error' => 'Titre d\'activité invalide : ' . $titre], 400);
-        //     }
-        //     $activiteIds[] = $activite->id;
-        // }
-
-        //  $activiteId = $request->input('activite_id');
-
-        // foreach ($activiteIds as $activiteId) {
-        //     // Insérer une nouvelle ligne dans la table offre_option_activite
-        //     DB::table('offre_option_activites')->insert([
-        //         'offre_id' => $offre->id,
-        //         'activite_id' => $activiteId,
-        //         'option_pay_id' => null, // vous pouvez ajuster ceci selon vos besoins
-        //         'nbr_seances_sem' => $request->input('nbr_seances_sem'),
-        //         'duree' => $request->input('duree'),
-        //         // Si nécessaire, vous pouvez également définir d'autres champs de la table ici
-        //     ]);
-        // }
-
-        // Retourner une réponse JSON avec les données de l'offre créée
-        return response()->json(['message' => 'Offre créée avec succès', 'offre' => $offre]);
-    }
-
-
-    // Affichage d'une offre selon l'id
-
-
-    public function show(string $id)
-    {
-        // Récupérer l'offre avec la relation activiteOffres chargée
-        $offre = Offre::with('activiteOffres')->findOrFail($id);
-
-        // Récupérer les activités associées à l'offre
-        $activitesAssociees = DB::table('offre_option_activites')
-            ->join('activites', 'offre_option_activites.activite_id', '=', 'activites.id')
-            ->where('offre_option_activites.offre_id', $id)
-            ->pluck('activites.titre');
-
-        // Construire la réponse JSON en incluant les informations de l'offre et les activités associées
+        $paiementIds = Offre_option_activite::where('offre_id', $id)
+                                    ->select('option_pay_id')
+                                    ->distinct()
+                                    ->get();
         $response = [
-            'offre' => [
-                'titre' => $offre->titre,
-                'description' => $offre->description,
-                'volume_horaire' => $offre->volume_horaire,
-                'message_pub' => $offre->message_pub,
-                'remise' => $offre->remise,
-                'activites_associees' => $activitesAssociees, // Inclure les activités associées à l'offre
-            ]
-        ];
-
-        // Retourner la réponse JSON
-        return response()->json($response);
-    }
-
-
-
-    // Update the specified resource in storage.
-
-
-    //Remove the specified resource from storage.
-
-    public function destroyOffre(string $id)
-    {
-        offre::findOrFail($id)->delete();
-        return response()->json(['message' => 'Offre supprimee avec succes'], 200);
-    }
-
-    public function remisepaiement(string $designation)
-    {
-        // Initialiser la variable de remise
-        $remise = 0;
-
-        // Utiliser une structure de contrôle switch pour traiter chaque cas de désignation
-        switch ($designation) {
-            case 'mois':
-                $remise = 0;
-                break;
-            case 'trimestre':
-                $remise = 10;
-                break;
-            case 'semestre':
-                $remise = 15;
-                break;
-            case 'annuel':
-                $remise = 20;
-                break;
-            default:
-                // Si la désignation n'est pas reconnue, laisser la remise à 0
-                break;
+            'offre' => Offre::find($id),
+            'activites' => Activite::whereIn('id', $activiteIds)->get(),
+            'options_paiement' => option_paiement::whereIn('id', $paiementIds)->get(),
+            ];
+            return response()->json($response);
         }
-
-        // Retourner la valeur de remise calculée
-        return $remise;
-    }
+     }
 
 
+    /**
+     ? Fonction pour créer une nouvelle offre
+     */
 
-    // option paiment
-
-    public function option_paiement(requestoffre $req, $id_Offre, $id_activite, $id_enfant)
+    public function store(Request $request)
     {
-
         // $user = Auth::User();
-
-        // Validation des données de la requête
-        $validatedData = $req->validate([
-            'designation' => 'required|string',
-            // 'remise' => 'required|decimal',
-            'methode_pay' => 'required|decimal'
-        ]);
-
-        // Initialiser la variable de remise
-        $remise = 0;
-        $designation=$validatedData['designation'];
-        // Utiliser une structure de contrôle switch pour traiter chaque cas de désignation
-        switch ($designation) {
-            case 'mois':
-                $remise = 0;
-                break;
-            case 'trimestre':
-                $remise = 10;
-                break;
-            case 'semestre':
-                $remise = 15;
-                break;
-            case 'annuel':
-                $remise = 20;
-                break;
-            default:
-                break;
-        }
-
-        $optionPaiment = new option_paiement();
-        $optionPaiment->designation = $req->designation;
-        $optionPaiment->remise = $remise;
-        $optionPaiment->methode_pay = $req->methode_pay;
-        $optionPaiment->save();
-
-
-
-        $offre_option_activite = offre_option_activite::find($id_Offre);
-        if ($offre_option_activite->activite_id === $id_activite) {
-            $offr = offre_option_activite::table('offre_option_activites')->update([
-                'option_pay_id' => $optionPaiment->id,
+        // $role = $user->role;
+        // if ($role === 0) {
+            $offreValidatedData = $request->validate([
+                'titre' => ['required', 'string', 'max:255'],
+                'description' => ['required', 'string', 'max:255'],
+                'date_creation' => ['required', 'string', 'max:255'],
+                'date_mise_a_jour' => ['nullable', 'string', 'max:255'],
+                'volume_horaire' => ['numeric', 'max:999999.99'],
+                'message_pub' => ['required', 'string', 'max:255'],
+                'remise' => ['numeric', 'max:999999.99'],
             ]);
-            $offr->save();
-        } else {
-            return;
+
+            // Créer une nouvelle offre
+            $offre = offre::create($offreValidatedData);
+
+            // Validation des données des activités
+            $activitesValidatedData = $request->validate([
+                'activite_ids' => 'required|array',
+                'activite_ids.*' => 'exists:activites,id',
+                'nbr_sceances_sem' => 'required|integer',
+                'duree' => 'required|numeric',
+            ]);
+
+            // Récupérer les IDs des activités depuis la requête
+            $activiteIds = $activitesValidatedData['activite_ids'];
+
+            // Récupérer les options de paiement depuis la requête
+            $optionsPaiement = $request->input('option_paiement', []);
+            $optionPaiements = $this->createOptionPaiement($optionsPaiement);
+
+            // Insérer les activités sélectionnées et leurs options de paiement dans la table pivot
+            foreach ($activiteIds as $activiteId) {
+                foreach ($optionPaiements as $optionData) {
+
+                    DB::table('offre_option_activites')->insert([
+                        'offre_id' => $offre->id,
+                        'activite_id' => $activiteId,
+                        'demande_id' => null,
+                        'option_pay_id' => $optionData->id,
+                        'nbr_sceances_sem' => $activitesValidatedData['nbr_sceances_sem'],
+                        'duree' => $activitesValidatedData['duree'],
+                    ]);
+                }
+            }
+
+            return response()->json(['message' => 'Offre créée avec succès', 'offre' => $offre]);
+        // }
+    }
+
+    public function createOptionPaiement(array $optionsPaiement)
+    {
+        $createdOptions = [];
+
+        foreach ($optionsPaiement as $optionPaiement) {
+            Validator::make($optionPaiement, [
+                'designation' => 'required|string',
+                'method_pay' => 'required|string',
+                'remise' => 'required|numeric',
+            ])->validate();
+
+            $createdOption = option_paiement::create($optionPaiement);
+            $createdOptions[] = $createdOption;
         }
 
+        return $createdOptions;
+    }
 
+    /**
+     ? Mise a jour de l'offre avec ses options paiements
+     */
 
-        $enfant_paiement = new enfant_paiement();
-        $enfant_paiement->enfant_id = $id_enfant;
-        $enfant_paiement->paiement_id = $optionPaiment->id;
-        $enfant_paiement->save();
+    public function update(Request $request, $id)
+    {
+        $user = Auth::User();
+        $role = $user->role;
+        if ($role === 0) {
+            $validated = $request->validate([
+                'offre' => 'required|array',
+                'offre.titre' => 'required|string',
+                'offre.description' => 'required|string',
+                'offre.date_creation' => 'required|string',
+                'offre.date_mise_a_jour' => 'nullable|string',
+                'offre.volume_horaire' => 'required|numeric',
+                'offre.message_pub' => 'required|string',
+                'offre.remise' => 'required|numeric',
 
-        return response()->json($enfant_paiement, 200);
+                'option_paiement' => 'required|array',
+                'option_paiement.*.id' => 'required|integer|exists:option_paiements,id',
+                'option_paiement.*.designation' => 'required|string',
+                'option_paiement.*.method_pay' => 'required|string',
+                'option_paiement.*.remise' => 'required|numeric',
+
+                'offre_option_activites' => 'required|array',
+                'offre_option_activites.*.activite_id' => 'required|integer|exists:activites,id',
+                'offre_option_activites.*.tarif' => 'required|numeric',
+                'offre_option_activites.*.nbr_sceances_sem' => 'required|integer',
+                'offre_option_activites.*.duree' => 'required|numeric',
+            ]);
+
+            // Mise à jour de l'offre
+            $offre = Offre::findOrFail($id);
+            $offre->update($validated['offre']);
+
+            // Mise à jour des options de paiement associées
+            foreach ($validated['option_paiement'] as $optionPayData) {
+                $optionPaiement = option_paiement::findOrFail($optionPayData['id']);
+                $optionPaiement->update($optionPayData);
+            }
+
+            // Mise à jour des relations dans la table pivot offre_option_activites
+            foreach ($validated['offre_option_activites'] as $offreOptionActiviteData) {
+                $offreOptionActivite = offre_option_activite::where('offre_id', $id)
+                    ->where('activite_id', $offreOptionActiviteData['activite_id'])
+                    ->firstOrFail();
+
+                $offreOptionActivite->update($offreOptionActiviteData);
+            }
+
+            return response()->json([
+                'message' => 'Les informations ont été mises à jour avec succès.',
+                'offre' => $offre,
+            ], 200);
+        }
+    }
+
+    /**
+ ? Suppresion de l'offre avec ses options paiements
+     */
+
+    public function destroy($id)
+    {
+        $user = Auth::User();
+        $role = $user->role;
+        if ($role === 0) {
+            $offre = Offre::findOrFail($id);
+            $optionPaiements = option_paiement::all();
+            $offre->delete();
+
+            foreach ($optionPaiements as $optionPaiement) {
+                $optionPaiement->delete();
+            }
+
+            return response()->json([
+                'message' => 'L\'offre et ses options de paiement associées ont été supprimées avec succès.'
+            ], 200);
+        }
     }
 }

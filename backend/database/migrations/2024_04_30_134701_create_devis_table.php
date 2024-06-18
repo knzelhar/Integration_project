@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('total_ht', 8, 2)->nullable(false);
             $table->decimal('total_ttc', 8, 2)->nullable(false);
             $table->string('devis_pdf')->nullable();
-            $table->foreignId('facture_id')->constrained('factures')->onDelete('cascade');
+            $table->foreignId('demande_id')->constrained('demandes')->onDelete('cascade');
             $table->timestamps();
         });
     }

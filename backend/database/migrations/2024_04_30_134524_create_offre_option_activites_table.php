@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('offre_option_activites', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('demande_id')->nullable()->constrained('demandes')->onDelete('cascade');
             $table->foreignId('offre_id')->constrained('offres')->onDelete('cascade');
             $table->foreignId('option_pay_id')->nullable()->constrained('option_paiements')->onDelete('cascade');
             $table->foreignId('activite_id')->constrained('activites')->onDelete('cascade');
             $table->decimal('tarif', 8, 2)->nullable();
-            $table->integer('nbr_hseances_sem')->nullable(false);
+            $table->integer('nbr_sceances_sem')->nullable(false);
             $table->float('duree')->nullable(false);
             $table->timestamps();
         });

@@ -11,8 +11,9 @@ class groupe extends Model
 
 
     protected $fillable = [
-        'id_activite',
-        'id_horaire'
+        'activite_id',
+        'horaire_id',
+        'enfant_id'
 
     ];
 }

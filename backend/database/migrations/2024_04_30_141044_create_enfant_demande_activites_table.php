@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('activite_id')->constrained('activites')->onDelete('cascade');
             $table->foreignId('demande_id')->constrained('demandes')->onDelete('cascade');
             $table->foreignId('enfant_id')->constrained('enfants')->onDelete('cascade');
-            $table->integer('nbr_enf')->default(0);
             $table->timestamps();
         });
     }

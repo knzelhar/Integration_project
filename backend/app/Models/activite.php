@@ -28,23 +28,23 @@ class activite extends Model
 
     public function animateur_users()
     {
-        return $this->belongsTo(animateur_user::class,'animateur_id');
+        return $this->belongsTo(animateur_user::class, 'animateur_id');
     }
 
     public function admin_users()
     {
-        return $this->belongsTo(admin_user::class);
+        return $this->belongsTo(admin_user::class, 'admin_id');
     }
 
     public function type_activites()
     {
-        return $this->belongsTo(type_activite::class);
+        return $this->belongsTo(type_activite::class, 'type_id');
     }
 
 
     public function horaires()
     {
-        return $this->belongsToMany(horaire::class, 'dipo_horaire_activites');
+        return $this->belongsToMany(horaire::class, 'dispo_horaire_activites', 'horaire_id', 'activite_id');
     }
 
 
@@ -56,23 +56,26 @@ class activite extends Model
 
     public function enfantActivites()
     {
-        return $this->belongsToMany(enfant::class, 'enfant_demande_activites');
+        return $this->belongsToMany(enfant::class, 'enfant_demande_activites', 'enfant_id', 'activite_id');
     }
 
     public function demandeActvites()
     {
-        return $this->belongsToMany(demande::class, 'enfant_demande_activites');
+        return $this->belongsToMany(demande::class, 'enfant_demande_activites', 'demande_id', 'activite_id');
     }
-
-
 
     public function offreAcitvites()
     {
-        return $this->belongsToMany(offre::class, 'offre_option_activites','offre_id');
+        return $this->belongsToMany(offre::class, 'offre_option_activites', 'activite_id', 'offre_id');
     }
 
-    public function optionActvites()
+    public function optionActivites()
     {
-        return $this->belongsToMany(option_paiement::class, 'offre_option_activites','option_pay_id');
+        return $this->belongsToMany(option_paiement::class, 'offre_option_activites', 'activite_id', 'option_pay_id');
+    }
+
+    public function demandeOffreActivites()
+    {
+        return $this->belongsToMany(demande::class, 'offre_option_activites', 'demande_id', 'activite_id');
     }
 }

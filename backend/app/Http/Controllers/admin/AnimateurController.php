@@ -9,32 +9,43 @@ use App\Models\User;
 use App\Http\Requests\requestanimateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+
 
 class AnimateurController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     ? Affichage des animateurs
      */
+
     public function index()
     {
+        $user = Auth::User();
+        $role = $user->role;
 
-        //  $animateurs = User::whereHas('animateur_users')->with('animateur_users')->get();
-         $animateurs = User::all();
-        return response()->json($animateurs);
+        if ($role === 0) {
+            $animateurs = animateur_user::with('users')->get();
+            return response()->json($animateurs);
+        }
     }
 
     /**
-     * Display the specified resource.
+     Affichage de l'animateur en details
      */
 
     public function show($id)
     {
-        $animateur = User::whereHas('animateur_users')->with('animateur_users')->findOrFail($id);
-        return response()->json($animateur);
+        $user = Auth::User();
+        $role = $user->role;
+
+        if ($role === 0) {
+            $animateurs = animateur_user::with('users')->findOrFail($id);
+            return response()->json($animateurs);
+        }
     }
 
     /**
-     * mise a jour de l'animateur
+     Mise a jour de l'animateur
      */
 
     public function update(requestanimateur $request, $id)
@@ -57,7 +68,7 @@ class AnimateurController extends Controller
         ]);
     }
     /**
-     * suppression de l'animateur
+     Suppression de l'animateur
      */
 
     public function destroy($id)
@@ -68,28 +79,31 @@ class AnimateurController extends Controller
     }
 
     /**
-     *   Affecter un animateur a une activite
-    */
-    
-
-    public function affecter(Request $request, $id)
-   {
-    $validatedData = $request->validate([
-        'animateur_id' => 'required|integer'
-    ]);
-    // Recherche sur les activite et l'animateur
-    $activite = Activite::findOrFail($id);
-
-    $animateur = Animateur_User::findOrFail($validatedData['animateur_id']);
-
-    $activite->animateur_id = $validatedData['animateur_id'];
-
-    $activite->save();
-
-    return response()->json([
-        'message' => "Animateur $animateur->id assigné à l'activité $activite->id avec succès",
-    ]);
-}
+     Affectation de l'animateur
+     */
 
 
+    public function affecter(Request $request, $activitId)
+    {
+        $user = Auth::User();
+        $role = $user->role;
+
+        if ($role === 0) {
+            $validatedData = $request->validate([
+                'animateur_id' => 'required|integer'
+            ]);
+            // Recherche sur les activite et l'animateur
+            $activite = Activite::findOrFail($activitId);
+
+            $animateur = Animateur_User::findOrFail($validatedData['animateur_id']);
+
+            $activite->animateur_id = $validatedData['animateur_id'];
+
+            $activite->save();
+
+            return response()->json([
+                'message' => "Animateur $animateur->id assigné à l'activité $activite->id avec succès",
+            ]);
+        }
+    }
 }

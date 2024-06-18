@@ -14,19 +14,25 @@ class offre_option_activite extends Model
         'offre_id',
         'option_pay_id',
         'activite_id',
+        'demande_id',
+        'tarif',
         'nbr_sceances_sem',
         'duree'
     ];
 
     public function offre() {
-        return $this->belongsTo(Offre::class);
+        return $this->belongsTo(offre::class, 'offre_id');
     }
 
     public function activite() {
-        return $this->belongsTo(Activite::class);
+        return $this->belongsTo(activite::class, 'activite_id');
+    }
+
+    public function demande() {
+        return $this->belongsTo(demande::class, 'demande_id');
     }
 
     public function optionPaiement() {
-        return $this->belongsTo(OptionPaiement::class);
+        return $this->belongsTo(option_paiement::class, 'option_pay_id');
     }
 }

@@ -15,7 +15,8 @@ class facture extends Model
         'statut_paiment',
         'total_ht',
         'total_ttc',
-        'facture_pdf'
+        'facture_pdf',
+        'devis_id'
 
     ];
 

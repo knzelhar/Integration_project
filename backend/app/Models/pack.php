@@ -13,7 +13,7 @@ class pack extends Model
         'type',
         'remise',
         'nbr_enfant',
-        'nbr_abtelier'
+        'nbr_atelier'
     ];
 
 

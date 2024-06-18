@@ -24,12 +24,16 @@ class offre extends Model
 
     public function activiteOffres()
     {
-        return $this->belongsToMany(activite::class, 'offre_option_activites','activite_id');
+        return $this->belongsToMany(activite::class, 'offre_option_activites', 'activite_id', 'offre_id');
     }
 
     public function optionOffre()
     {
-        return $this->belongsToMany(option_paiement::class, 'offre_option_activites','option_pay_id');
+        return $this->belongsToMany(option_paiement::class, 'offre_option_activites', 'offre_id', 'option_pay_id');
+    }
+    public function demandeOffres()
+    {
+        return $this->belongsToMany(demande::class, 'offre_option_activites', 'offre_id', 'demande_id');
     }
 
     public function enfants()

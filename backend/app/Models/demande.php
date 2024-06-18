@@ -19,13 +19,28 @@ class demande extends Model
         'parent_id',
         'pack_id',
         'admin_id',
-        'devis_id'
+
 
     ];
 
     public function activiteDemandes()
     {
         return $this->belongsToMany(activite::class, 'enfant_demande_activites');
+    }
+
+    public function offreDemandes()
+    {
+        return $this->belongsToMany(offre::class, 'offre_option_activites', 'offre_id', 'demande_id');
+    }
+
+    public function activitOffreDemandes()
+    {
+        return $this->belongsToMany(activite::class, 'offre_option_activites', 'activite_id', 'demande_id');
+    }
+
+    public function optionDemandes()
+    {
+        return $this->belongsToMany(option_paiement::class, 'offre_option_activites', 'option_pay_id', 'demande_id');
     }
 
     public function enfantDemandes()
@@ -49,10 +64,8 @@ class demande extends Model
     }
     public function devis()
     {
-        return $this->belongsTo(Devis::class, 'devis_id');
+        return $this->belongsTo(devis::class);
     }
-
-
 
     public function factures()
     {

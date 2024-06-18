@@ -18,12 +18,12 @@ class enfant extends Model
     ];
     public function parent_users()
     {
-        return $this->belongsTo(parent_user::class);
+        return $this->belongsTo(parent_user::class, 'parent_id');
     }
 
     public function horaires()
     {
-        return $this->belongsToMany(horaire::class, 'dipo_horaire_enfants');
+        return $this->belongsToMany(horaire::class, 'dispo_horaire_enfants');
     }
 
     public function activites()
@@ -38,12 +38,12 @@ class enfant extends Model
 
     public function demandeEnfants()
     {
-        return $this->belongsToMany(demande::class, 'enfant_demande_activites');
+        return $this->belongsToMany(demande::class, 'enfant_demande_activites', 'enfant_id', 'demande_id');
     }
 
 
-    public function enfant_paiements()
-    {
-        return $this->belongsToMany(option_paiement::class, 'enfant_paiements');
-    }
+    // public function enfant_paiements()
+    // {
+    //     return $this->belongsToMany(option_paiement::class, 'enfant_paiements');
+    // }
 }

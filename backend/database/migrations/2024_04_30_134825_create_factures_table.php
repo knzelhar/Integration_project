@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('total_ttc', 8, 2)->nullable(false);
             $table->enum('statut_paiment', ['a payer', 'payée', 'non payée','archivé'])->default('A payer');
             $table->string('facture_pdf')->nullable();
+            $table->foreignId('devis_id')->constrained('devis')->onDelete('cascade');
             $table->timestamps();
         });
     }

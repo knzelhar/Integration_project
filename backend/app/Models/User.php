@@ -51,7 +51,7 @@ class User extends Authenticatable  implements MustVerifyEmail
     }
     public function admin_users()
     {
-        return $this->hasOne(admin_user::class);
+        return $this->hasMany(admin_user::class);
     }
 
     public function animateur_users()

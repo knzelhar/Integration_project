@@ -36,8 +36,8 @@ class offre extends Model
         return $this->belongsToMany(demande::class, 'offre_option_activites', 'offre_id', 'demande_id');
     }
 
-    public function enfants()
-    {
-        return $this->belongsToMany(enfant::class, 'offre_enfants');
-    }
+    // public function enfants()
+    // {
+    //     return $this->belongsToMany(enfant::class, 'offre_enfants');
+    // }
 }

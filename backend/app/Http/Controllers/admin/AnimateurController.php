@@ -35,13 +35,13 @@ class AnimateurController extends Controller
 
     public function show($id)
     {
-        $user = Auth::User();
-        $role = $user->role;
+        // $user = Auth::User();
+        // $role = $user->role;
 
-        if ($role === 0) {
+        // if ($role === 0) {
             $animateurs = animateur_user::with('users')->findOrFail($id);
             return response()->json($animateurs);
-        }
+        // }
     }
 
     /**
@@ -85,10 +85,10 @@ class AnimateurController extends Controller
 
     public function affecter(Request $request, $activitId)
     {
-        $user = Auth::User();
-        $role = $user->role;
+        // $user = Auth::User();
+        // $role = $user->role;
 
-        if ($role === 0) {
+        // if ($role === 0) {
             $validatedData = $request->validate([
                 'animateur_id' => 'required|integer'
             ]);
@@ -104,6 +104,6 @@ class AnimateurController extends Controller
             return response()->json([
                 'message' => "Animateur $animateur->id assigné à l'activité $activite->id avec succès",
             ]);
-        }
+        // }
     }
 }

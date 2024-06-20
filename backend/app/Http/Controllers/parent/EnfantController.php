@@ -18,9 +18,10 @@ class EnfantController extends Controller
     {
         $user = Auth::User();
         $role = $user->role;
+        $parendId=$user->parent_users->id;
 
         if ($role === 2) {
-            $enfants = enfant::all();
+            $enfants = enfant::where('parent_id', $parendId)->get();
             $result = [];
             foreach ($enfants as $enfant) {
                 $data = [
@@ -74,11 +75,11 @@ class EnfantController extends Controller
 
     public function store(Request $request)
     {
-        $user = Auth::User();
-        $role = $user->role;
-        $parentId = $user->id;
+        // $user = Auth::User();
+        // $role = $user->role;
+        // $parentId = $user->id;
 
-        if ($role === 2) {
+        // if ($role === 2) {
             $request->validate([
                 'nom' => 'required|string',
                 'prenom' => 'required|string',
@@ -91,12 +92,12 @@ class EnfantController extends Controller
                 'prenom' => $request->prenom,
                 'niveau_etu' => $request->niveau_etu,
                 'date_naiss' => $request->date_naiss,
-                'parent_id' =>$parentId,
+                'parent_id' =>1,//$parentId,
             ]);
             return response()->json($enfant, 201);
-        } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        // } else {
+        //     return response()->json(['error' => 'Unauthorized'], 401);
+        // }
     }
 
 

@@ -55,9 +55,9 @@ class DemandeController extends Controller
 
     public function demandesAtraiter()
     {
-        $user = Auth::User();
-        $role = $user->role;
-        if ($role === 0) {
+        // $user = Auth::User();
+        // $role = $user->role;
+        // if ($role === 0) {
             $demandes = demande::with(['parent_users', 'packs', 'devis', 'devis.facture'])
                 ->where('statut_admin', 'non traitée')
                 ->get();
@@ -81,7 +81,7 @@ class DemandeController extends Controller
             }
 
             return response()->json($result);
-        }
+        // }
     }
 
     /**

@@ -85,17 +85,18 @@ Route::get('/register', [resetpassword::class, 'adminR']);
 
 // animateur routes
 
+// Route::middleware('auth:sanctum')->group(function () {
 Route::get('/admin/animateurs', [AnimateurController::class, 'index']);
 Route::get('/admin/animateurs/{id}', [AnimateurController::class, 'show']);
 Route::put('/admin/animateurs/{id}', [AnimateurController::class, 'update']);
 Route::delete('/admin/animateurs/{id}', [AnimateurController::class, 'destroy']);
 Route::post('/admin/animateurs/{activiteId}', [AnimateurController::class, 'affecter']);
-
+// });
 
 
 // demande routes
 
-
+// Route::middleware('auth:sanctum')->group(function () {
 Route::get('/demandes', [DemandeController::class, 'demandes']);
 Route::get('/demandes-a-traiter', [DemandeController::class, 'demandesAtraiter']);
 Route::get('/demandes/{id}', [DemandeController::class, 'show']);
@@ -103,10 +104,11 @@ Route::get('/demandes-acceptees', [DemandeController::class, 'demandeAcceptees']
 Route::get('/demandes-refusees', [DemandeController::class, 'demandeRefusees']);
 Route::put('/demandes/{id}/accepter', [DemandeController::class, 'accepterDemande']);
 Route::put('/demandes/{id}/refuser', [DemandeController::class, 'refuserDemande']);
-
+// });
 
 // facture routes
 
+// Route::middleware('auth:sanctum')->group(function () {
 Route::get('/factures', [FactureController::class, 'indexFactures']);
 Route::get('/factures/{id}', [FactureController::class, 'getFacture']);
 Route::get('/facturesapayer', [FactureController::class, 'facturesAPayer']);
@@ -115,18 +117,19 @@ Route::get('/factures-non-payees', [FactureController::class, 'facturesNonPayees
 Route::get('/factures-archivees', [FactureController::class, 'facturesArchivees']);
 Route::put('/factures/{id}/Marquer-Payees', [FactureController::class, 'MarquerPayees']);
 Route::put('/factures/{id}/Marquer-Non-Payees', [FactureController::class, 'MarquerNonPayees']);
+// });
 
 // pack routes
 
+// Route::middleware('auth:sanctum')->group(function () {
 Route::get('/packs', [PackController::class, 'index']);
 Route::get('/packs/{id}', [PackController::class, 'show']);
 Route::post('/packs', [PackController::class, 'store']);
 Route::put('/packs/{id}', [PackController::class, 'update']);
 Route::delete('/packs/{id}', [PackController::class, 'destroy']);
-
+// });
 
 //activites routes
-
 
 Route::get('/activites', [ActiviteController::class, 'index']);
 Route::get('/activites/{id}', [ActiviteController::class, 'show']);
@@ -136,12 +139,12 @@ Route::delete('/activites/{id}', [ActiviteController::class, 'destroy']);
 
 // offre routes
 
-
 Route::get('/offres', [offreController::class, 'index']);
 Route::get('/offres/{id}', [offreController::class, 'show']);
 Route::post('/offres', [offreController::class, 'store']);
 Route::put('/offres/{id}', [offreController::class, 'update']);
 Route::delete('/offres/{id}', [offreController::class, 'destroy']);
+
 
 Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -164,7 +167,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 
 
 // Inscription
-
+// Route::middleware('auth:sanctum')->group(function () {
 Route::get('/enfants', [InscriptionoffreController::class, 'indexEnfant']);
 Route::get('/inscriptions/offres', [InscriptionoffreController::class, 'indexOffre']);
 Route::post('/inscriptionsDetermine', [InscriptionoffreController::class, 'determine']);
@@ -176,9 +179,9 @@ Route::get('/inscriptions/option_paiements/{id_offre}', [InscriptionoffreControl
 Route::get('/inscriptions/horaires_disponibles/{id_activite}', [InscriptionoffreController::class, 'Disponibilites']);
 Route::post('/enregistrer_horaires/enfants/{enfantId}/{activiteId}', [InscriptionoffreController::class, 'storeDispo']);
 Route::post('/inscriptions', [InscriptionoffreController::class, 'createDemande']);
-Route::post('/inscriptions_packs/{id_Offre}/{id_activite}/{id_enfant}', [InscriptionoffreController::class, 'demandeAfterPack']);
+Route::post('/inscriptions_packs', [InscriptionoffreController::class, 'demandeAfterPack']);
 Route::get('/inscriptions/packs', [InscriptionoffreController::class, 'indexPacks'])->name('inscription_pack');
-
+// });
 
 
 
@@ -186,13 +189,14 @@ Route::get('/inscriptions/packs', [InscriptionoffreController::class, 'indexPack
  ESPACE ANIMATEUR
 */
 
+// Route::middleware('auth:sanctum')->group(function () {
  Route::get('/activites/animateur/{animateurId}', [EspaceanimateurController::class, 'afficherActivites']);
  Route::get('/activite/horaires/{activiteId}', [EspaceanimateurController::class, 'afficherHorairesActivite']);
  Route::post('/activite/animateur/horaires/{activiteId}/{animateurId}/', [EspaceanimateurController::class, 'enregistrerHorairesSelectionnes']);
  Route::get('/animateur/{id}',[EspaceanimateurController::class,'activite_animer'] );
  Route::get('/animateur/{id}',[EspaceanimateurController::class,'allinformation'] );
  Route::get('/enfant/{id}',[EspaceanimateurController::class,'listeenfant'] );
-
+// });
 
 
 

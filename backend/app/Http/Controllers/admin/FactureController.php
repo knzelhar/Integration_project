@@ -49,12 +49,12 @@ class FactureController extends Controller
 
     public function facturesAPayer()
     {
-        $user = Auth::User();
-        $role = $user->role;
-        if ($role === 0) {
+        // $user = Auth::User();
+        // $role = $user->role;
+        // if ($role === 0) {
             $facturesAPayers = Facture::where('statut_paiment', 'a payer')->get();
             return response()->json($facturesAPayers);
-        }
+        // }
     }
 
     /**

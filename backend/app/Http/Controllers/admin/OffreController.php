@@ -38,10 +38,10 @@ class OffreController extends Controller
 
      public function show(string $id)
      {
-        $user = Auth::User();
-        $role = $user->role;
+        // $user = Auth::User();
+        // $role = $user->role;
 
-        if ($role === 0) {
+        // if ($role === 0) {
         $activiteIds = Offre_option_activite::where('offre_id', $id)
                                     ->select('activite_id')
                                     ->distinct()
@@ -57,13 +57,13 @@ class OffreController extends Controller
             'options_paiement' => option_paiement::whereIn('id', $paiementIds)->get(),
             ];
             return response()->json($response);
-        }
+        // }
      }
 
 
     /**
      ? Fonction pour créer une nouvelle offre
-     */
+    */
 
     public function store(Request $request)
     {
@@ -194,16 +194,16 @@ class OffreController extends Controller
     }
 
     /**
- ? Suppresion de l'offre avec ses options paiements
+     Suppresion de l'offre avec ses options paiements
      */
 
     public function destroy($id)
     {
-        $user = Auth::User();
-        $role = $user->role;
-        if ($role === 0) {
+        // $user = Auth::User();
+        // $role = $user->role;
+        // if ($role === 0) {
             $offre = Offre::findOrFail($id);
-            $optionPaiements = option_paiement::all();
+            $optionPaiements = option_paiement::with('offreOptions')->get;
             $offre->delete();
 
             foreach ($optionPaiements as $optionPaiement) {
@@ -213,6 +213,6 @@ class OffreController extends Controller
             return response()->json([
                 'message' => 'L\'offre et ses options de paiement associées ont été supprimées avec succès.'
             ], 200);
-        }
+        // }
     }
 }

@@ -16,13 +16,13 @@ class PackController extends Controller
 
     public function index()
     {
-        $user = Auth::User();
-        $role = $user->role;
+        // $user = Auth::User();
+        // $role = $user->role;
 
-        if ($role === 0) {
+        // if ($role === 0) {
             $packs = pack::all();
             return response()->json($packs);
-        }
+        // }
     }
 
 
@@ -33,13 +33,13 @@ class PackController extends Controller
 
     public function show($id)
     {
-        $user = Auth::User();
-        $role = $user->role;
+        // $user = Auth::User();
+        // $role = $user->role;
 
-        if ($role === 0) {
+        // if ($role === 0) {
             $pack = Pack::findOrFail($id);
             return response()->json($pack);
-        }
+        // }
     }
 
     /**
@@ -66,7 +66,7 @@ class PackController extends Controller
                 'nbr_enfant' => $request->nbr_enfant,
                 'nbr_atelier' => $request->nbr_atelier
             ]);
-            // $pack->save();
+            $pack->save();
 
             return response()->json($pack, 201);
         // }
@@ -78,10 +78,10 @@ class PackController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = Auth::User();
-        $role = $user->role;
+        // $user = Auth::User();
+        // $role = $user->role;
 
-        if ($role === 0) {
+        // if ($role === 0) {
             $validatedData = $request->validate([
                 'type' => 'required|string|in:pack_nbr_enf,pack_atelier',
                 'remise' => 'required|numeric',
@@ -100,7 +100,7 @@ class PackController extends Controller
             $pack->save();
 
             return response()->json(['message' => 'Pack updated successfully']);
-        }
+        // }
     }
 
     /**
@@ -109,10 +109,10 @@ class PackController extends Controller
 
     public function destroy($id)
     {
-        $user = Auth::User();
-        $role = $user->role;
+        // $user = Auth::User();
+        // $role = $user->role;
 
-        if ($role === 0) {
+        // if ($role === 0) {
             $pack = Pack::find($id);
 
             if (!$pack) {
@@ -122,6 +122,6 @@ class PackController extends Controller
             $pack->delete();
 
             return response()->json(['message' => 'Pack deleted successfully']);
-        }
+        // }
     }
 }

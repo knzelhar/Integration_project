@@ -94,7 +94,7 @@ class InscriptionoffreController extends Controller
                 'image_pub' => $activite->image_pub,
                 'lien_youtube' => $activite->lien_youtube,
                 'age_min' => $activite->age_min,
-                'age_max' => $activite->age_max,
+                'age_max' => $activite->age_max,-
                 'eff_min' => $activite->eff_min,
                 'eff_max' => $activite->eff_max,
                 'prix' => $activite->prix,
@@ -124,14 +124,16 @@ class InscriptionoffreController extends Controller
         $role = $user->role;
 
         if ($role === 2) {
+
             $activiteIds = Offre_option_activite::where('offre_id', $id)
-                ->select('activite_id')
-                ->distinct()
-                ->get();
-
-            $activites = Activite::whereIn('id', $activiteIds)->get();
-
-            return response()->json($activites);
+                                    ->select('activite_id')
+                                    ->distinct()
+                                    ->get();
+        $response = [
+            'offre' => Offre::find($id),
+            'activites' => Activite::whereIn('id', $activiteIds)->get(),
+            ];
+            return response()->json($response);
         }
     }
 
@@ -253,9 +255,14 @@ class InscriptionoffreController extends Controller
      */
 
     public function indexPacks()
-    {
+    {  $user = Auth::User();
+        $role = $user->role;
+        $parentId = $user->parent_users->id;
+
+        if ($role === 2) {
         $packs = pack::all();
         return response()->json($packs);
+        }
     }
 
     /**
@@ -299,10 +306,6 @@ class InscriptionoffreController extends Controller
 
             $packType = $this->determinePack($nombreActivites, $nombreEnfants);
 
-            // if ($packType == 0) {
-            //     return redirect()->route('inscription_pack');
-            // }
-
             // Récupérer l'ID du pack en fonction du type
             $packId = null;
             if ($packType == 1) {
@@ -321,7 +324,7 @@ class InscriptionoffreController extends Controller
             }
 
             $demande = new Demande([
-                'parent_id' =>1,// $parentId,
+                'parent_id' => 1,//$parentId,
                 'pack_id' => $packId,
                 'admin_id' => null,
                 'date_dem' => now(),

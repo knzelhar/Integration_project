@@ -187,9 +187,7 @@ class ActiviteController extends Controller
 {
     $user = Auth::User();
     $role = $user->role;
-
     if ($role === 0){
-
     $request->validate([
         'titre' => ['string', 'max:255'],
         'description' => ['string', 'max:255'],
@@ -248,10 +246,10 @@ class ActiviteController extends Controller
 
     public function destroy(string $id)
 {
-    $user = Auth::User();
-    $role = $user->role;
+    // $user = Auth::User();
+    // $role = $user->role;
 
-    if ($role === 0){
+    // if ($role === 0){
 
     $activite = Activite::findOrFail($id);
 
@@ -266,7 +264,7 @@ class ActiviteController extends Controller
 
     // Retournez une réponse JSON indiquant que l'activité a été supprimée avec succès
     return response()->json(['message' => 'Activité supprimée avec succès']);
-    }
+    // }
 }
 
 }
